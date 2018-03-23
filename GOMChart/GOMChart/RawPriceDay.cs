@@ -69,11 +69,11 @@ namespace Charlotte
 
 		public bool HasPrice(long dateTime)
 		{
-			return Prices.contains(RawPrice.GetFerret(dateTime));
+			return Prices.contains(RawPrice.GetTarget(dateTime));
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="dateTime"></param>
 		/// <returns>dateTimeより前のPriceがある。</returns>
@@ -86,7 +86,7 @@ namespace Charlotte
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="dateTime"></param>
 		/// <returns>dateTimeより後のPriceがある。</returns>
@@ -100,7 +100,7 @@ namespace Charlotte
 
 		public RawPrice GetPrevPrice(long dateTime)
 		{
-			int index = Prices.leftIndexOf(RawPrice.GetFerret(dateTime)) - 1;
+			int index = Prices.leftIndexOf(RawPrice.GetTarget(dateTime)) - 1;
 
 			if (index < 0)
 				throw new Exception(dateTime + " より前の Price はありません。");
@@ -110,7 +110,7 @@ namespace Charlotte
 
 		public RawPrice GetNextPrice(long dateTime)
 		{
-			int index = Prices.rightIndexOf(RawPrice.GetFerret(dateTime)) + 1;
+			int index = Prices.rightIndexOf(RawPrice.GetTarget(dateTime)) + 1;
 
 			if (Prices.size() <= index)
 				throw new Exception(dateTime + " より後の Price はありません。");
@@ -120,7 +120,7 @@ namespace Charlotte
 
 		public RawPrice GetPrice(long dateTime)
 		{
-			int index = Prices.indexOf(RawPrice.GetFerret(dateTime));
+			int index = Prices.indexOf(RawPrice.GetTarget(dateTime));
 
 			if (index == -1)
 				throw new Exception(dateTime + " の Price はありません。");

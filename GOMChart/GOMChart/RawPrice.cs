@@ -36,7 +36,7 @@ namespace Charlotte
 			return LongTools.comp(a.DateTime, b.DateTime);
 		}
 
-		public static RawPrice GetFerret(long dateTime)
+		public static RawPrice GetTarget(long dateTime)
 		{
 			return new RawPrice()
 			{
