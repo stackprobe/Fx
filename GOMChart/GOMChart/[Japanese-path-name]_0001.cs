@@ -418,6 +418,15 @@ namespace Charlotte
 							secInterval /= 2;
 							secBound /= 2;
 
+							// 調整 TODO
+							{
+								if (secBound % secInterval != 0)
+								{
+									secBound /= secInterval;
+									secBound *= secInterval;
+								}
+							}
+
 							tokens[2] = this.SecToString(secInterval);
 							tokens[3] = this.SecToString(secBound);
 						}
