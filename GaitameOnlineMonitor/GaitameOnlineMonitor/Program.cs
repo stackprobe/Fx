@@ -93,18 +93,18 @@ namespace Charlotte
 
 					if (nextTimeSec <= timeSec)
 					{
-#if true
+#if !true
 						procRatePage();
 						nextTimeSec = (timeSec / 20L + 1L) * 20L;
-#else // old
-                        if (procRatePage())
-                        {
-                            nextTimeSec = (timeSec / 60L + 1L) * 60L;
-                        }
-                        else
-                        {
-                            nextTimeSec = (timeSec / 20L + 1L) * 20L;
-                        }
+#else
+						if (procRatePage())
+						{
+							nextTimeSec = (timeSec / 60L + 1L) * 60L;
+						}
+						else
+						{
+							nextTimeSec = (timeSec / 20L + 1L) * 20L;
+						}
 #endif
 						GC.Collect();
 					}
