@@ -63,7 +63,7 @@ namespace YahooFinanceMonitor
 		{
 			Console.WriteLine(
 				Encoding.GetEncoding("UTF-8").GetString(new HttpClient(
-					///////////////////////////////////////////////////////////// // $_git:secret
+					//////////////////////////////////////////////////////////////// $_git:secret
 					).Perform()));
 			Console.ReadLine();
 		}
@@ -82,7 +82,7 @@ namespace YahooFinanceMonitor
 				try
 				{
 					byte[] resBody = new HttpClient(
-						///////////////////////////////////////////////////////////// // $_git:secret
+						//////////////////////////////////////////////////////////////// $_git:secret
 						).Perform();
 					WrLine("resBody_length: " + resBody.Length);
 					string strResBody = Encoding.UTF8.GetString(resBody);
@@ -106,7 +106,7 @@ namespace YahooFinanceMonitor
 				try
 				{
 					byte[] resBody = new HttpClient(
-						//////////////////////////////////////////////////////////////// // $_git:secret
+						/////////////////////////////////////////////////////////////////// $_git:secret
 						).Perform();
 					WrLine("resBody_length: " + resBody.Length);
 					string strResBody = Encoding.UTF8.GetString(resBody);
@@ -127,7 +127,7 @@ namespace YahooFinanceMonitor
 				try
 				{
 					byte[] resBody = new HttpClient(
-						//////////////////////////////////////////////////////////////// // $_git:secret
+						/////////////////////////////////////////////////////////////////// $_git:secret
 						).Perform();
 					WrLine("resBody_length: " + resBody.Length);
 					string strResBody = Encoding.UTF8.GetString(resBody);
@@ -167,7 +167,7 @@ namespace YahooFinanceMonitor
 			try
 			{
 				byte[] resBody = new HttpClient(
-					////////////////////////////////////////////////// / //// / ///// // $_git:secret
+					//////////////////////////////////////////////////////////////////// $_git:secret
 					).Perform();
 				WrLine("resBody_length: " + resBody.Length);
 				string strResBody = Encoding.UTF8.GetString(resBody);
@@ -292,7 +292,7 @@ namespace YahooFinanceMonitor
 					T3_Now = TimeData.Now;
 
 					byte[] binResBody = new HttpClient(
-						////////////////////////////////////////// // $_git:secret
+						///////////////////////////////////////////// $_git:secret
 						).Perform();
 					string resBody = Encoding.UTF8.GetString(binResBody);
 
@@ -395,7 +395,7 @@ namespace YahooFinanceMonitor
 				try
 				{
 					byte[] binResBody = new HttpClient(
-						////////////////////////////////////////// // $_git:secret
+						///////////////////////////////////////////// $_git:secret
 						).Perform();
 					string resBody = Encoding.UTF8.GetString(binResBody);
 

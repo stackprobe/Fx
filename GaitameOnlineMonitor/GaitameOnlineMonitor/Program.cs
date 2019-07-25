@@ -140,7 +140,7 @@ namespace Charlotte
 		private static byte[] getRatePage()
 		{
 			HTTPClient hc = new HTTPClient(
-				////////////////////////////////////////////// // $_git:secret
+				///////////////////////////////////////////////// $_git:secret
 				);
 			hc.connectionTimeoutMillis = 10000;
 			hc.timeoutMillis = 15000;
