@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Charlotte
 {
-	public class CurrencyPairs
+	public static class CurrencyPairs
 	{
 		public static CurrencyPair AUDCHF = new CurrencyPair("AUDCHF");
 		public static CurrencyPair AUDJPY = new CurrencyPair("AUDJPY");

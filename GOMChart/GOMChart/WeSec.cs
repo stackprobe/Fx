@@ -9,7 +9,7 @@ namespace Charlotte
 	/// <summary>
 	/// WeSec == 取引停止時、時間を刻まない時間(秒)
 	/// </summary>
-	public class WeSec
+	public static class WeSec
 	{
 		private static readonly long SEC_MIN = DateTimeToSec.toSec(10000101000000L);
 		private static readonly long SEC_MAX = DateTimeToSec.toSec(99991231235959L);

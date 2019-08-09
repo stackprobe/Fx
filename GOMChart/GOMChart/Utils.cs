@@ -6,7 +6,7 @@ using Charlotte.Tools;
 
 namespace Charlotte
 {
-	public class Utils
+	public static class Utils
 	{
 		/// <summary>
 		/// CurrencyPairs.FxCollect から呼んでね！
