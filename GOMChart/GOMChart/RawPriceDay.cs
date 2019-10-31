@@ -37,12 +37,19 @@ namespace Charlotte
 		{
 			Prices.clear();
 
-			if (File.Exists(DatFile))
+			try
 			{
-				foreach (string line in File.ReadAllLines(DatFile, Encoding.ASCII))
+				if (File.Exists(DatFile))
 				{
-					Prices.add(new RawPrice(line));
+					foreach (string line in File.ReadAllLines(DatFile, Encoding.ASCII))
+					{
+						Prices.add(new RawPrice(line));
+					}
 				}
+			}
+			catch (Exception e)
+			{
+				throw new Exception(e.Message + ", DatFile: " + DatFile, e);
 			}
 		}
 

@@ -259,6 +259,8 @@ namespace Charlotte
 			{
 				// 失敗
 
+				this.TTip.SetToolTip(this.Args, "" + e);
+
 				this.Args.ForeColor = Color.Red;
 				this.Args.Text = args + "#" + e.Message;
 				this.Args.SelectionStart = 0;
