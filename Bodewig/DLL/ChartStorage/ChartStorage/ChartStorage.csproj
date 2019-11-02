@@ -45,7 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChartStorage\ChartStorage0001.cs" />
+    <Compile Include="ChartStorage\CSChart.cs" />
+    <Compile Include="ChartStorage\CSChartManager.cs" />
+    <Compile Include="ChartStorage\Internal\Consts.cs" />
+    <Compile Include="ChartStorage\CSPrice.cs" />
+    <Compile Include="ChartStorage\Internal\StorageLoader.cs" />
+    <Compile Include="ChartStorage\Internal\Validators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
