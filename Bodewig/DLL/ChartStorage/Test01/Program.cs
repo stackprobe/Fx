@@ -9,7 +9,7 @@ namespace Charlotte
 {
 	class Program
 	{
-		public const string APP_IDENT = "{c40f3a02-8be2-4b53-9e6a-a129fbe1f964}";
+		public const string APP_IDENT = "{373dd60f-6070-4ae9-ae18-466bf7eb94c8}";
 		public const string APP_TITLE = "ChartStorage";
 
 		static void Main(string[] args)
