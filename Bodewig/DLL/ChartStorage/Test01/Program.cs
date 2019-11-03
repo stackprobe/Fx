@@ -25,7 +25,7 @@ namespace Charlotte
 
 		private void Main2(ArgsReader ar)
 		{
-			new ChartStorage0001Test().Test01(); // -- 0001
+			new CSChartManagerTest().Test01();
 		}
 	}
 }

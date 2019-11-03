@@ -9,10 +9,10 @@ namespace Charlotte.ChartStorage.Internal
 {
 	internal static class StorageLoader
 	{
-		public static List<CSPrice> LoadStorage(int date, string currencyPair)
+		public static CSPrice[] LoadStorage(int date, string currencyPair)
 		{
-			//Validators.CheckDate(date);
-			//Validators.CheckCurrencyPair(currencyPair);
+			Validators.CheckDate(date);
+			Validators.CheckCurrencyPair(currencyPair);
 
 			string file = Path.Combine(Consts.STORAGE_DIR, date + "_" + currencyPair + ".csv");
 			List<CSPrice> prices = new List<CSPrice>();
@@ -55,7 +55,7 @@ namespace Charlotte.ChartStorage.Internal
 					throw new Exception(e.Message + ", file: " + file, e);
 				}
 			}
-			return prices;
+			return prices.ToArray();
 		}
 	}
 }
