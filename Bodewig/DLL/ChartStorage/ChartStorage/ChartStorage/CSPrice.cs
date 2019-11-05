@@ -32,5 +32,16 @@ namespace Charlotte.ChartStorage
 		/// 売値
 		/// </summary>
 		public double Bid { get; internal set; }
+
+		/// <summary>
+		/// 買値と売値の中間
+		/// </summary>
+		public double Mid
+		{
+			get
+			{
+				return (this.Ask + this.Bid) / 2.0;
+			}
+		}
 	}
 }
