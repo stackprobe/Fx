@@ -13,12 +13,13 @@ namespace Charlotte
 {
 	/// <summary>
 	/// 
-	/// フォーマット = 通貨ペア:日時:インターバル:期間:移動平均インターバル:移動平均_1:移動平均_2 ...
+	/// フォーマット = 通貨ペア:日時:インターバル:期間:(T|F):移動平均インターバル:移動平均_1:移動平均_2 ...
 	/// 
 	/// 移動平均は省略可能
 	/// 日時 = YYYYMMDDhhmmss
 	/// インターバル, 期間, 移動平均インターバル, 移動平均_x = 99d or 99h or 99m or 99
 	/// 移動平均インターバル, 移動平均_x = 省略可能
+	/// 高値安値を表示(T=する|F=しない)
 	/// 
 	/// Enter = グラフ更新
 	/// Alt + 左 = 期間の(1/4)過去へ
@@ -64,7 +65,8 @@ namespace Charlotte
 
 		private void Win単純移動平均_Shown(object sender, EventArgs e)
 		{
-			this.Args.Text = "USDJPY:" + DateTimeToSec.Now.getDateTime() + ":10m:7d:10m:5d:10d";
+			this.Args.Text = "USDJPY:" + DateTimeToSec.Now.getDateTime() + ":10m:7d:T:10m:5d:10d";
+			//this.Args.Text = "USDJPY:" + DateTimeToSec.Now.getDateTime() + ":10m:7d:10m:5d:10d";
 			//this.Args.Text = "USDJPY:" + DateTimeToSec.Now.getDateTime() + ":10m:7d:5d:10d"; // old
 			//this.Args.Text = "USDJPY:" + DateTimeToSec.Now.getDateTime() + ":3m:7d:5d:10d"; // old
 			//this.Args.Text = "USDJPY:" + DateTimeToSec.Now.getDateTime() + ":30:7d:5d:10d"; // old
@@ -96,6 +98,7 @@ namespace Charlotte
 				long secStart = DateTimeToSec.toSec(dateTime);
 				long secInterval = StringToSec(argq.Dequeue());
 				long secBound = StringToSec(argq.Dequeue());
+				string sVisHigLow = argq.Dequeue();
 				long secMvAvgInterval = -1L;
 
 				if (1 <= argq.Count) // 省略可能につき
@@ -123,6 +126,22 @@ namespace Charlotte
 				if (Consts.SEC_BOUND_MAX < secBound)
 					throw new Exception("期間長過ぎ！");
 
+				bool visHigLow;
+
+				switch (sVisHigLow)
+				{
+					case "T":
+						visHigLow = true;
+						break;
+
+					case "F":
+						visHigLow = false;
+						break;
+
+					default:
+						throw new Exception("Bad sVisHigLow: " + sVisHigLow);
+				}
+
 				//secBound /= secInterval;
 				//secBound *= secInterval;
 
@@ -149,6 +168,46 @@ namespace Charlotte
 				foreach (long secMvAvg in secMvAvgs)
 					mvAvgs.Add(new MovingAverage(wsp, secMvAvgInterval, secMvAvg));
 
+				if (visHigLow)
+				{
+					// 高値
+					{
+						Series srs = new Series();
+						srs.ChartType = SeriesChartType.Line;
+						srs.Color = Color.LightGray;
+
+						for (long sec = 0; sec <= secBound; sec += secInterval)
+						{
+							double hig = wsp.GetPrice(secStart - sec).High;
+
+							minMid = Math.Min(minMid, hig);
+							maxMid = Math.Max(maxMid, hig);
+
+							srs.Points.AddXY(-sec / 86400.0, hig);
+						}
+						this.MChart.Series.Add(srs);
+					}
+
+					// 安値
+					{
+						Series srs = new Series();
+						srs.ChartType = SeriesChartType.Line;
+						srs.Color = Color.Gray;
+
+						for (long sec = 0; sec <= secBound; sec += secInterval)
+						{
+							double low = wsp.GetPrice(secStart - sec).Low;
+
+							minMid = Math.Min(minMid, low);
+							maxMid = Math.Max(maxMid, low);
+
+							srs.Points.AddXY(-sec / 86400.0, low);
+						}
+						this.MChart.Series.Add(srs);
+					}
+				}
+
+				// Mid
 				{
 					Series srs = new Series();
 					srs.ChartType = SeriesChartType.Line;
