@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Charlotte.MovingAverageChart
 {
-	public class MACommon
+	public static class MACommon
 	{
 		public delegate double GetPrice_d(long ttSec);
 	}
