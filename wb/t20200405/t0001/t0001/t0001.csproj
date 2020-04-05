@@ -37,13 +37,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChartStorage">
-      <HintPath>..\..\..\..\bw\DLL\ChartStorage\ChartStorage\bin\Release\ChartStorage.dll</HintPath>
+      <HintPath>C:\Dev\Fx\Bodewig\DLL\ChartStorage\ChartStorage\bin\Release\ChartStorage.dll</HintPath>
     </Reference>
     <Reference Include="Chocolate">
       <HintPath>C:\Dev\CSharp\Chocolate\Chocolate\bin\Release\Chocolate.dll</HintPath>
     </Reference>
     <Reference Include="MovingAverageChart">
-      <HintPath>..\..\..\..\bw\DLL\MovingAverageChart\MovingAverageChart\bin\Release\MovingAverageChart.dll</HintPath>
+      <HintPath>C:\Dev\Fx\Bodewig\DLL\MovingAverageChart\MovingAverageChart\bin\Release\MovingAverageChart.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,7 +55,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TradingTimeChart">
-      <HintPath>..\..\..\..\bw\DLL\TradingTimeChart\TradingTimeChart\bin\Release\TradingTimeChart.dll</HintPath>
+      <HintPath>C:\Dev\Fx\Bodewig\DLL\TradingTimeChart\TradingTimeChart\bin\Release\TradingTimeChart.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
