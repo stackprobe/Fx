@@ -8,17 +8,15 @@ namespace Charlotte.TradingTimeChart.Internal
 {
 	internal class Validators
 	{
-		// TTSEC_MIN, TTSEC_MAX を見ると循環参照になるので見ない。
-
 		public static void CheckTTSec(long ttSec)
 		{
-			if (ttSec < 0L || long.MaxValue / 2L < ttSec)
+			if (ttSec < TTConsts.TTSEC_MIN || TTConsts.TTSEC_MAX < ttSec)
 				throw new Exception("Bad ttSec: " + ttSec);
 		}
 
 		public static void CheckDTSec(long dtSec)
 		{
-			if (dtSec < 0L || long.MaxValue / 2L < dtSec)
+			if (dtSec < TTConsts.DTSEC_MIN || TTConsts.DTSEC_MAX < dtSec)
 				throw new Exception("Bad dtSec: " + dtSec);
 		}
 	}

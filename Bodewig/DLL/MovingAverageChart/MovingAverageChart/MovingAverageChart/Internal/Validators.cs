@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Charlotte.MovingAverageChart.Internal
 {
-	public static class Validators
+	internal static class Validators
 	{
 		public static void CheckTTSec(long ttSec)
 		{

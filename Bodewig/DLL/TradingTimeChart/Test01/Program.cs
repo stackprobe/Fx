@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Charlotte.Tools;
 using Charlotte.Tests.TradingTimeChart;
+using Charlotte.TradingTimeChart;
+using Charlotte.ChartStorage;
 
 namespace Charlotte
 {
@@ -26,7 +28,17 @@ namespace Charlotte
 		private void Main2(ArgsReader ar)
 		{
 			//new TTCommonTest().Test01();
-			new TTChartTest().Test01();
+			//new TTChartTest().Test01();
+			Test01();
+		}
+
+		private void Test01()
+		{
+			Console.WriteLine("TTConsts.TTSEC_MIN: " + TTConsts.TTSEC_MIN);
+			Console.WriteLine("TTConsts.TTSEC_MAX: " + TTConsts.TTSEC_MAX);
+
+			Console.WriteLine("TTConsts.DTSEC_MIN: " + DateTimeToSec.ToSec(CSConsts.DATE_TIME_MIN));
+			Console.WriteLine("TTConsts.DTSEC_MAX: " + DateTimeToSec.ToSec(CSConsts.DATE_TIME_MAX));
 		}
 	}
 }
