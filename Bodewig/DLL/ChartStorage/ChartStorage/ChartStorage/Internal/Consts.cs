@@ -11,6 +11,6 @@ namespace Charlotte.ChartStorage.Internal
 		public const string STORAGE_DIR = @"C:\var\Fx";
 
 		public const int LOAD_DAY_MAX = 1000;
-		public const int MARGIN_DAY_MAX = 3;
+		public const int MARGIN_DAY_MAX = 30;
 	}
 }
