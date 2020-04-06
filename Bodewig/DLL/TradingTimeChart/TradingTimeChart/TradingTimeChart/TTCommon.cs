@@ -7,6 +7,9 @@ using Charlotte.TradingTimeChart.Internal;
 
 namespace Charlotte.TradingTimeChart
 {
+	/// <summary>
+	/// FX取引時間 == 月曜日07:00 ～ 土曜日06:00
+	/// </summary>
 	public static class TTCommon
 	{
 		private const long TT_ZERO = 25200;

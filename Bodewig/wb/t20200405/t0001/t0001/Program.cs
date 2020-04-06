@@ -31,7 +31,8 @@ namespace Charlotte
 
 		private void Main2(ArgsReader ar)
 		{
-			Test01();
+			//Test01();
+			new Test0001().Test01();
 		}
 
 		private void Test01()
