@@ -9,7 +9,7 @@ using Charlotte.TradingTimeChart;
 
 namespace Charlotte
 {
-	public class Test0002
+	public class Test0001
 	{
 		public void Test01()
 		{
@@ -45,8 +45,10 @@ namespace Charlotte
 					}
 					while ("土日".Contains(DateTimeUnit.FromDate(nextDate).GetWeekday()));
 
+					int bNextDate = Test01_b(nextDate, date, csc);
+
 					long dt = date * 1000000L + 90000;
-					long nextDt = nextDate * 1000000L + 90000;
+					long bNextDt = bNextDate * 1000000L + 90000;
 
 					// ----
 
@@ -54,7 +56,7 @@ namespace Charlotte
 					{
 						MvAvgPrice = mac.GetPrice(TTCommon.DateTimeToTTSec(dt)),
 						Price = csc.GetPrice(dt).Mid,
-						NextDayPrice = csc.GetPrice(nextDt).Mid,
+						NextDayPrice = csc.GetPrice(bNextDt).Mid,
 					});
 
 					// ----
@@ -75,6 +77,31 @@ namespace Charlotte
 					}
 				}
 			}
+		}
+
+		private int Test01_b(int nextDate, int date, CSChart csc)
+		{
+			for (int c = 0; c <
+				4
+				//10
+				//20
+				; c++)
+			{
+				{
+					long dt = date * 1000000L + 90000;
+					long nextDt = nextDate * 1000000L + 90000;
+
+					if (csc.GetPrice(dt).Mid < csc.GetPrice(nextDt).Mid)
+						break;
+				}
+
+				do
+				{
+					nextDate = DateToDay.ToDate(DateToDay.ToDay(nextDate) + 1);
+				}
+				while ("土日".Contains(DateTimeUnit.FromDate(nextDate).GetWeekday()));
+			}
+			return nextDate;
 		}
 	}
 }
