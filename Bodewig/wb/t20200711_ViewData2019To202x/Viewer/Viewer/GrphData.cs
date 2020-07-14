@@ -57,7 +57,7 @@ namespace Charlotte
 				throw new Exception("行数が少なすぎます。");
 		}
 
-		public int Start;
+		public int Start = -1; // -1 == Range 未設定
 		public int End;
 		public int Step;
 

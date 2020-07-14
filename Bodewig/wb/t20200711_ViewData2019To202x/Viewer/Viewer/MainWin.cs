@@ -13,6 +13,7 @@ using Charlotte.Tools;
 using Charlotte.Chocomint.Dialogs;
 using Charlotte.Utils;
 using System.Windows.Forms.DataVisualization.Charting;
+using Charlotte.TradingTimeChart;
 
 namespace Charlotte
 {
@@ -484,7 +485,8 @@ namespace Charlotte
 			{
 				Series srs = new Series();
 				srs.ChartType = SeriesChartType.Line;
-				srs.Color = Color.Gray;
+				srs.Color = Color.LightGray;
+				srs.BorderWidth = 2;
 
 				for (int index = Ground.I.GrphData.Start; index <= Ground.I.GrphData.End; index += Ground.I.GrphData.Step)
 				{
@@ -503,7 +505,8 @@ namespace Charlotte
 			{
 				Series srs = new Series();
 				srs.ChartType = SeriesChartType.Line;
-				srs.Color = Color.Gray;
+				srs.Color = Color.LightGray;
+				srs.BorderWidth = 2;
 
 				for (int index = Ground.I.GrphData.Start; index <= Ground.I.GrphData.End; index += Ground.I.GrphData.Step)
 				{
@@ -549,7 +552,7 @@ namespace Charlotte
 			for (int maIndex = 0; maIndex < cond.MaDays.Length; maIndex++)
 			{
 				GrphCond.MaDayInfo maDay = cond.MaDays[maIndex];
-				int maColorIndex = Math.Min(maIndex, cond.MaDays.Length - 1);
+				int maColorIndex = Math.Min(maIndex, maColors.Length - 1);
 				Color maColor = maColors[maColorIndex];
 
 				// ma
@@ -586,6 +589,46 @@ namespace Charlotte
 			}
 
 			// ---- グラフの描画ここまで
+		}
+
+		private int MCMM_LastX = int.MinValue;
+		private int MCMM_LastY = int.MinValue;
+
+		private void MChart_MouseMove(object sender, MouseEventArgs e)
+		{
+			int x = e.X;
+			int y = e.Y;
+
+			if (this.MCMM_LastX == x && this.MCMM_LastY == y)
+				return;
+
+			this.MCMM_LastX = x;
+			this.MCMM_LastY = y;
+
+			if (this.MChart.ChartAreas.Count == 0) // ? 未表示
+				return;
+
+			if (Ground.I.GrphData == null) // ? 未表示
+				return;
+
+			if (Ground.I.GrphData.Start == -1) // ? 未表示
+				return;
+
+			try
+			{
+				double aX = this.MChart.ChartAreas[0].AxisX.PixelPositionToValue(x);
+				double aY = this.MChart.ChartAreas[0].AxisY.PixelPositionToValue(y);
+
+				long ttSec = DoubleTools.ToLong(aX * 86400.0);
+				long dt = TTCommon.TTSecToDateTime(ttSec);
+
+				this.TTip.SetToolTip(
+					this.MChart,
+					DateTimeUnit.FromDateTime(dt).ToString() + "\n" + aY.ToString("F9")
+					);
+			}
+			catch
+			{ }
 		}
 	}
 }

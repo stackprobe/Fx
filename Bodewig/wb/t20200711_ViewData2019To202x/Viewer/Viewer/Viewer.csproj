@@ -56,6 +56,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TradingTimeChart">
+      <HintPath>..\..\..\..\DLL\TradingTimeChart\TradingTimeChart\bin\Release\TradingTimeChart.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Consts.cs" />

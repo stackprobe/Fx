@@ -88,6 +88,7 @@
 			this.SubStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.CurrPair = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
+			this.TTip = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.MChart)).BeginInit();
 			this.MaGroup.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -114,6 +115,7 @@
 			this.MChart.TabIndex = 11;
 			this.MChart.Text = "chart1";
 			this.MChart.Click += new System.EventHandler(this.MChart_Click);
+			this.MChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MChart_MouseMove);
 			// 
 			// DateTimeSt
 			// 
@@ -800,6 +802,12 @@
 			this.label3.TabIndex = 0;
 			this.label3.Text = "通貨ペア";
 			// 
+			// TTip
+			// 
+			this.TTip.AutoPopDelay = 20000;
+			this.TTip.InitialDelay = 500;
+			this.TTip.ReshowDelay = 100;
+			// 
 			// MainWin
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -897,6 +905,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel SubStatus;
 		private System.Windows.Forms.ComboBox CurrPair;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.ToolTip TTip;
 	}
 }
 
