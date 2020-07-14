@@ -83,7 +83,7 @@ namespace Charlotte.MovingAverageChart
 					}
 					this.CurrTTSec = ttSec;
 				}
-				return this.CurrTotal / this.Span;
+				return this.CurrTotal / (this.Span + 1);
 			}
 			catch
 			{
