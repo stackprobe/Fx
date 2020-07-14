@@ -1,6 +1,10 @@
 ----
 ビルド・リリース手順
 
+準備
+	FxCollect
+	newcsrr
+
 ..\..\DLL をビルド
 
 ..\t20200711_MakeData2019To202x\t0001.sln を実行して C:\temp\Data2019To202x を作成
