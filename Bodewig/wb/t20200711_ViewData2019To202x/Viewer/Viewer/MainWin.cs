@@ -168,9 +168,9 @@ namespace Charlotte
 						statusText = ex.Message;
 					}
 
-					if (cond != null && (this.LastGrphCond == null || this.LastGrphCond.IsSame(cond)))
+					if (cond != null && (this.LastGrphCond == null || this.LastGrphCond.IsSame(cond) == false)) // ? グラフ更新の必要あり
 					{
-						this.LastGrphCond = cond; // DrawGrph()が例外を投げたとき何度もDrawGrph()しないように、先に更新する。
+						this.LastGrphCond = cond; // DrawGrph()が例外を投げたとき何度もDrawGrph()しないよう、先に更新する。
 						this.DrawGrph(cond);
 					}
 
@@ -262,9 +262,28 @@ namespace Charlotte
 		{
 			this.UIEvent_Go(() =>
 			{
-				// TODO
+				{
+					long sec1 = DateTimeToSec.ToSec(long.Parse(this.DateTimeSt.Text));
+					long sec2 = DateTimeToSec.ToSec(long.Parse(this.DateTimeEd.Text));
 
-				CondChanged_Fast();
+					long span = sec2 - sec1;
+					span = Math.Max(span, 0);
+					sec1 -= span / 2;
+
+					long st = DateTimeToSec.ToDateTime(sec1);
+					st = Math.Max(st, Ground.I.Period_DateTimeSt);
+
+					sec1 = DateTimeToSec.ToSec(st);
+					sec2 = sec1 + span;
+
+					long ed = DateTimeToSec.ToDateTime(sec2);
+					ed = Math.Min(ed, Ground.I.Period_DateTimeEd);
+
+					this.DateTimeSt.Text = st.ToString();
+					this.DateTimeEd.Text = ed.ToString();
+				}
+
+				CondChanged_ByBtn();
 			});
 		}
 
@@ -272,9 +291,28 @@ namespace Charlotte
 		{
 			this.UIEvent_Go(() =>
 			{
-				// TODO
+				{
+					long sec1 = DateTimeToSec.ToSec(long.Parse(this.DateTimeSt.Text));
+					long sec2 = DateTimeToSec.ToSec(long.Parse(this.DateTimeEd.Text));
 
-				CondChanged_Fast();
+					long span = sec2 - sec1;
+					span = Math.Max(span, 0);
+					sec2 += span / 2;
+
+					long ed = DateTimeToSec.ToDateTime(sec2);
+					ed = Math.Min(ed, Ground.I.Period_DateTimeEd);
+
+					sec2 = DateTimeToSec.ToSec(ed);
+					sec1 = sec2 - span;
+
+					long st = DateTimeToSec.ToDateTime(sec1);
+					st = Math.Max(st, Ground.I.Period_DateTimeSt);
+
+					this.DateTimeSt.Text = st.ToString();
+					this.DateTimeEd.Text = ed.ToString();
+				}
+
+				CondChanged_ByBtn();
 			});
 		}
 
@@ -287,9 +325,9 @@ namespace Charlotte
 		{
 			this.UIEvent_Go(() =>
 			{
-				// TODO
+				this.ExpandSpan(0.5);
 
-				CondChanged_Fast();
+				CondChanged_ByBtn();
 			});
 		}
 
@@ -302,10 +340,33 @@ namespace Charlotte
 		{
 			this.UIEvent_Go(() =>
 			{
-				// TODO
+				this.ExpandSpan(2.0);
 
-				CondChanged_Fast();
+				CondChanged_ByBtn();
 			});
+		}
+
+		private void ExpandSpan(double rate)
+		{
+			long sec1 = DateTimeToSec.ToSec(long.Parse(this.DateTimeSt.Text));
+			long sec2 = DateTimeToSec.ToSec(long.Parse(this.DateTimeEd.Text));
+
+			long span = sec2 - sec1;
+			span = Math.Max(span, 120); // 2 min <=
+			span = DoubleTools.ToLong(span * rate);
+			sec1 = sec2 - span;
+
+			long st = DateTimeToSec.ToDateTime(sec1);
+			st = Math.Max(st, Ground.I.Period_DateTimeSt);
+
+			sec1 = DateTimeToSec.ToSec(st);
+			sec2 = sec1 + span;
+
+			long ed = DateTimeToSec.ToDateTime(sec2);
+			ed = Math.Min(ed, Ground.I.Period_DateTimeEd);
+
+			this.DateTimeSt.Text = st.ToString();
+			this.DateTimeEd.Text = ed.ToString();
 		}
 
 		private void CondChanged()
@@ -313,7 +374,7 @@ namespace Charlotte
 			this.CondChangedCount = Consts.REFRESH_DELAY;
 		}
 
-		private void CondChanged_Fast()
+		private void CondChanged_ByBtn()
 		{
 			this.CondChangedCount = Consts.REFRESH_DELAY_FAST;
 		}
@@ -395,10 +456,29 @@ namespace Charlotte
 
 		private void DrawGrph(GrphCond cond)
 		{
+			if (Ground.I.GrphData == null || cond.CurrPair != Ground.I.GrphData.CurrPair) // ? グラフデータ更新の必要あり
+			{
+				Ground.I.GrphData = null;
+				GC.Collect();
+
+				BusyDlgTools.Show(Program.APP_TITLE, "グラフデータをロードしています。(通貨ペア：" + cond.CurrPair + ")", () =>
+				{
+					Ground.I.GrphData = new GrphData(cond.CurrPair);
+				});
+
+				GC.Collect();
+			}
+
+			Ground.I.GrphData.SetRange(cond.DateTimeSt, cond.DateTimeEd);
+
+			// ---- グラフの描画ここから
+
 			this.MChart.Series.Clear();
 			this.MChart.ChartAreas.Clear();
 
 			// TODO
+
+			// ---- グラフの描画ここまで
 		}
 	}
 }

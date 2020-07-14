@@ -697,7 +697,7 @@
 			this.BtnBack.Name = "BtnBack";
 			this.BtnBack.Size = new System.Drawing.Size(98, 26);
 			this.BtnBack.TabIndex = 6;
-			this.BtnBack.Text = "過去へ";
+			this.BtnBack.Text = "<---";
 			this.BtnBack.UseVisualStyleBackColor = true;
 			this.BtnBack.Click += new System.EventHandler(this.BtnBack_Click);
 			// 
@@ -707,7 +707,7 @@
 			this.BtnForward.Name = "BtnForward";
 			this.BtnForward.Size = new System.Drawing.Size(98, 26);
 			this.BtnForward.TabIndex = 7;
-			this.BtnForward.Text = "未来へ";
+			this.BtnForward.Text = "--->";
 			this.BtnForward.UseVisualStyleBackColor = true;
 			this.BtnForward.Click += new System.EventHandler(this.BtnForward_Click);
 			// 
@@ -823,6 +823,7 @@
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
 			this.Name = "MainWin";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Viewer";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWin_FormClosing);
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWin_FormClosed);

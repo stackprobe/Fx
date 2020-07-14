@@ -46,5 +46,7 @@ namespace Charlotte
 			if (DateTimeToSecUtils.IsFairDateTime(this.Period_DateTimeEd) == false)
 				throw new Exception("不正な開始日時");
 		}
+
+		public GrphData GrphData = null;
 	}
 }
