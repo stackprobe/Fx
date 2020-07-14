@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Charlotte.Tools;
 using Charlotte.Chocomint.Dialogs;
 using Charlotte.Utils;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Charlotte
 {
@@ -476,7 +477,113 @@ namespace Charlotte
 			this.MChart.Series.Clear();
 			this.MChart.ChartAreas.Clear();
 
-			// TODO
+			double yMin = double.MaxValue;
+			double yMax = double.MinValue;
+
+			// Low
+			{
+				Series srs = new Series();
+				srs.ChartType = SeriesChartType.Line;
+				srs.Color = Color.Gray;
+
+				for (int index = Ground.I.GrphData.Start; index <= Ground.I.GrphData.End; index += Ground.I.GrphData.Step)
+				{
+					GrphData.PriceInfo price = Ground.I.GrphData.GetPrice(index);
+					double low = price.Low;
+
+					yMin = Math.Min(yMin, low);
+					yMax = Math.Max(yMax, low);
+
+					srs.Points.AddXY(price.TTSec / 86400.0, low);
+				}
+				this.MChart.Series.Add(srs);
+			}
+
+			// Hig
+			{
+				Series srs = new Series();
+				srs.ChartType = SeriesChartType.Line;
+				srs.Color = Color.Gray;
+
+				for (int index = Ground.I.GrphData.Start; index <= Ground.I.GrphData.End; index += Ground.I.GrphData.Step)
+				{
+					GrphData.PriceInfo price = Ground.I.GrphData.GetPrice(index);
+					double hig = price.Hig;
+
+					yMin = Math.Min(yMin, hig);
+					yMax = Math.Max(yMax, hig);
+
+					srs.Points.AddXY(price.TTSec / 86400.0, hig);
+				}
+				this.MChart.Series.Add(srs);
+			}
+
+			// Mid
+			{
+				Series srs = new Series();
+				srs.ChartType = SeriesChartType.Line;
+				srs.Color = Color.Green;
+
+				for (int index = Ground.I.GrphData.Start; index <= Ground.I.GrphData.End; index += Ground.I.GrphData.Step)
+				{
+					GrphData.PriceInfo price = Ground.I.GrphData.GetPrice(index);
+					double mid = price.Mid;
+
+					yMin = Math.Min(yMin, mid);
+					yMax = Math.Max(yMax, mid);
+
+					srs.Points.AddXY(price.TTSec / 86400.0, mid);
+				}
+				this.MChart.Series.Add(srs);
+			}
+
+			Color[] maColors = new Color[]
+			{
+				Color.Red,
+				Color.Blue,
+				Color.Purple,
+				Color.DarkCyan,
+				Color.DarkOrange,
+			};
+
+			for (int maIndex = 0; maIndex < cond.MaDays.Length; maIndex++)
+			{
+				GrphCond.MaDayInfo maDay = cond.MaDays[maIndex];
+				int maColorIndex = Math.Min(maIndex, cond.MaDays.Length - 1);
+				Color maColor = maColors[maColorIndex];
+
+				// ma
+				{
+					Series srs = new Series();
+					srs.ChartType = SeriesChartType.Line;
+					srs.Color = maColor;
+
+					for (int index = Ground.I.GrphData.Start; index <= Ground.I.GrphData.End; index += Ground.I.GrphData.Step)
+					{
+						GrphData.PriceInfo price = Ground.I.GrphData.GetPrice(index);
+						double maVal = price.MaVals[maDay.Index];
+
+						yMin = Math.Min(yMin, maVal);
+						yMax = Math.Max(yMax, maVal);
+
+						srs.Points.AddXY(price.TTSec / 86400.0, maVal);
+					}
+					this.MChart.Series.Add(srs);
+				}
+			}
+
+			// ca
+			{
+				ChartArea ca = new ChartArea();
+
+				ca.AxisX.Minimum = Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).TTSec / 86400.0;
+				ca.AxisX.Maximum = Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).TTSec / 86400.0;
+				ca.AxisX.Interval = 1.0;
+				ca.AxisY.Minimum = yMin;
+				ca.AxisY.Maximum = yMax;
+
+				this.MChart.ChartAreas.Add(ca);
+			}
 
 			// ---- グラフの描画ここまで
 		}
