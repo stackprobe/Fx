@@ -30,11 +30,10 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
 			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWin));
 			this.MainTimer = new System.Windows.Forms.Timer(this.components);
-			this.MainChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.MChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.DateTimeSt = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -89,7 +88,7 @@
 			this.SubStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			this.CurrPair = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
-			((System.ComponentModel.ISupportInitialize)(this.MainChart)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.MChart)).BeginInit();
 			this.MaGroup.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -99,25 +98,22 @@
 			this.MainTimer.Enabled = true;
 			this.MainTimer.Tick += new System.EventHandler(this.MainTimer_Tick);
 			// 
-			// MainChart
+			// MChart
 			// 
-			this.MainChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.MChart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			chartArea1.Name = "ChartArea1";
-			this.MainChart.ChartAreas.Add(chartArea1);
-			legend1.Name = "Legend1";
-			this.MainChart.Legends.Add(legend1);
-			this.MainChart.Location = new System.Drawing.Point(12, 176);
-			this.MainChart.Name = "MainChart";
+			this.MChart.ChartAreas.Add(chartArea1);
+			this.MChart.Location = new System.Drawing.Point(12, 176);
+			this.MChart.Name = "MChart";
 			series1.ChartArea = "ChartArea1";
-			series1.Legend = "Legend1";
 			series1.Name = "Series1";
-			this.MainChart.Series.Add(series1);
-			this.MainChart.Size = new System.Drawing.Size(740, 380);
-			this.MainChart.TabIndex = 11;
-			this.MainChart.Text = "chart1";
-			this.MainChart.Click += new System.EventHandler(this.MainChart_Click);
+			this.MChart.Series.Add(series1);
+			this.MChart.Size = new System.Drawing.Size(740, 380);
+			this.MChart.TabIndex = 11;
+			this.MChart.Text = "chart1";
+			this.MChart.Click += new System.EventHandler(this.MChart_Click);
 			// 
 			// DateTimeSt
 			// 
@@ -821,7 +817,7 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.DateTimeSt);
-			this.Controls.Add(this.MainChart);
+			this.Controls.Add(this.MChart);
 			this.Font = new System.Drawing.Font("メイリオ", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -832,7 +828,7 @@
 			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainWin_FormClosed);
 			this.Load += new System.EventHandler(this.MainWin_Load);
 			this.Shown += new System.EventHandler(this.MainWin_Shown);
-			((System.ComponentModel.ISupportInitialize)(this.MainChart)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.MChart)).EndInit();
 			this.MaGroup.ResumeLayout(false);
 			this.MaGroup.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
@@ -845,7 +841,7 @@
 		#endregion
 
 		private System.Windows.Forms.Timer MainTimer;
-		private System.Windows.Forms.DataVisualization.Charting.Chart MainChart;
+		private System.Windows.Forms.DataVisualization.Charting.Chart MChart;
 		private System.Windows.Forms.TextBox DateTimeSt;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
