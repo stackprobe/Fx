@@ -51,6 +51,7 @@ namespace Charlotte
 			this.DateTimeEd.Text = "";
 
 			this.Status.Text = "";
+			this.MidStatus.Text = "";
 			this.SubStatus.Text = "";
 		}
 
@@ -159,7 +160,10 @@ namespace Charlotte
 				if (this.CondChangedCount == 1) // Do Refresh
 				{
 					GrphCond cond = null;
-					string statusText = "";
+					//string statusText = "";
+					string statusText = "(更新なし)";
+					//string statusText = this.Status.Text; // ng -- エラーメッセージが残る。
+					bool statusTextErrorFlag = false;
 
 					try
 					{
@@ -168,16 +172,44 @@ namespace Charlotte
 					catch (Exception ex)
 					{
 						statusText = ex.Message;
+						statusTextErrorFlag = true;
 					}
 
 					if (cond != null && (this.LastGrphCond == null || this.LastGrphCond.IsSame(cond) == false)) // ? グラフ更新の必要あり
 					{
 						this.LastGrphCond = cond; // DrawGrph()が例外を投げたとき何度もDrawGrph()しないよう、先に更新する。
 						this.DrawGrph(cond);
+
+						statusText =
+							DateTimeUnit.FromDateTime(Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).DateTime) +
+							" ～ " +
+							DateTimeUnit.FromDateTime(Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).DateTime) +
+							", Range: " +
+							(Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).TTSec - Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).TTSec) +
+							" sec (" +
+							((Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).TTSec - Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).TTSec) / 86400.0).ToString("F3") +
+							" days), Step: " +
+							Ground.I.GrphData.Step +
+							" sec";
 					}
 
 					if (this.Status.Text != statusText)
 						this.Status.Text = statusText;
+
+					Color statusTextForeColor = Consts.LABEL_FORE_COLOR;
+					Color statusTextBackColor = Consts.LABEL_BACK_COLOR;
+
+					if (statusTextErrorFlag)
+					{
+						statusTextForeColor = Color.White;
+						statusTextBackColor = Color.Red;
+					}
+
+					if (this.Status.ForeColor != statusTextForeColor)
+						this.Status.ForeColor = statusTextForeColor;
+
+					if (this.Status.BackColor != statusTextBackColor)
+						this.Status.BackColor = statusTextBackColor;
 				}
 
 				{
@@ -223,7 +255,7 @@ namespace Charlotte
 				}
 				catch (Exception ex)
 				{
-					MessageDlgTools.Error(Program.APP_TITLE + " - Error", ex);
+					MessageDlgTools.Error(Program.APP_TITLE + " - Error @ UIEvent", ex);
 				}
 			}
 		}
@@ -578,10 +610,24 @@ namespace Charlotte
 			// ca
 			{
 				ChartArea ca = new ChartArea();
+				double axInterval;
+
+				{
+					long span = Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).TTSec - Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).TTSec;
+
+					if (span < 86400)
+						axInterval = 1.0 / 24;
+					else if (span < 86400 * 2)
+						axInterval = 0.5;
+					else if (span < 86400 * 20)
+						axInterval = 1.0;
+					else
+						axInterval = 10.0;
+				}
 
 				ca.AxisX.Minimum = Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).TTSec / 86400.0;
 				ca.AxisX.Maximum = Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).TTSec / 86400.0;
-				ca.AxisX.Interval = 1.0;
+				ca.AxisX.Interval = axInterval;
 				ca.AxisY.Minimum = yMin;
 				ca.AxisY.Maximum = yMax;
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Charlotte
 {
@@ -12,5 +14,8 @@ namespace Charlotte
 
 		public const int REFRESH_DELAY = 6;
 		public const int REFRESH_DELAY_FAST = 2;
+
+		public static readonly Color LABEL_FORE_COLOR = new Label().ForeColor;
+		public static readonly Color LABEL_BACK_COLOR = new Label().BackColor;
 	}
 }

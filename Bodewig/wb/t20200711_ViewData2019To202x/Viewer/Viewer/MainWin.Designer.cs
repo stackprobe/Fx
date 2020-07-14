@@ -89,6 +89,7 @@
 			this.CurrPair = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.TTip = new System.Windows.Forms.ToolTip(this.components);
+			this.MidStatus = new System.Windows.Forms.ToolStripStatusLabel();
 			((System.ComponentModel.ISupportInitialize)(this.MChart)).BeginInit();
 			this.MaGroup.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
@@ -737,6 +738,7 @@
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Status,
+            this.MidStatus,
             this.SubStatus});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 559);
 			this.statusStrip1.Name = "statusStrip1";
@@ -747,10 +749,8 @@
 			// Status
 			// 
 			this.Status.Name = "Status";
-			this.Status.Size = new System.Drawing.Size(690, 17);
-			this.Status.Spring = true;
+			this.Status.Size = new System.Drawing.Size(39, 17);
 			this.Status.Text = "Status";
-			this.Status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SubStatus
 			// 
@@ -807,6 +807,13 @@
 			this.TTip.AutoPopDelay = 20000;
 			this.TTip.InitialDelay = 500;
 			this.TTip.ReshowDelay = 100;
+			// 
+			// MidStatus
+			// 
+			this.MidStatus.Name = "MidStatus";
+			this.MidStatus.Size = new System.Drawing.Size(651, 17);
+			this.MidStatus.Spring = true;
+			this.MidStatus.Text = "MidStatus";
 			// 
 			// MainWin
 			// 
@@ -906,6 +913,7 @@
 		private System.Windows.Forms.ComboBox CurrPair;
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ToolTip TTip;
+		private System.Windows.Forms.ToolStripStatusLabel MidStatus;
 	}
 }
 
