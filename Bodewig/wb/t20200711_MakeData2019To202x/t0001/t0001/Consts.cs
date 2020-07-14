@@ -9,12 +9,6 @@ namespace Charlotte
 	{
 		public static string[] CurrPairs = new string[]
 		{
-			// -- 先行
-
-			"USDJPY",
-
-			// -- 全て
-
 			"AUDCHF",
 			"AUDJPY",
 			"AUDNZD",
@@ -37,7 +31,7 @@ namespace Charlotte
 			"NZDUSD",
 			"USDCAD",
 			"USDCHF",
-			//"USDJPY", moved
+			"USDJPY",
 			"ZARJPY",
 		};
 	}
