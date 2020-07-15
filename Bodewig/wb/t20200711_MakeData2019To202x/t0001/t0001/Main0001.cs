@@ -32,7 +32,7 @@ namespace Charlotte
 
 			foreach (string currPair in Consts.CurrPairs)
 			{
-				Main01_2(currPair);
+				MakeDataFile(currPair);
 
 				GC.Collect(); // 2bs
 			}
@@ -46,7 +46,7 @@ namespace Charlotte
 			35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
 		};
 
-		private void Main01_2(string currPair)
+		private void MakeDataFile(string currPair)
 		{
 			Console.WriteLine("currPair: " + currPair); // test cout
 

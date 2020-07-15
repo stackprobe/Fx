@@ -78,14 +78,17 @@ namespace Charlotte
 
 			this.Step = 1;
 
-			while (1000 < (this.End - this.Start) / this.Step) // ? プロット数多すぎ
+			const int PLOT_NUM_MAX = 1000;
+			int origSpan = this.End - this.Start;
+
+			while (PLOT_NUM_MAX < (this.End - this.Start + 1) / this.Step) // ? プロット数 PLOT_NUM_BORDER より多い -> プロット数多すぎ
 			{
 				if (this.Step < 16)
 					this.Step++;
 				else
 					this.Step *= 2;
 
-				int span = this.End - this.Start;
+				int span = origSpan;
 
 				span /= this.Step;
 				span *= this.Step;

@@ -85,7 +85,7 @@ namespace Charlotte
 			{
 				MessageDlgTools.Error(Program.APP_TITLE + " - Error @ Shown", ex);
 
-				Environment.Exit(1);
+				Environment.Exit(1); // unrecoverable error
 			}
 
 			// ----
@@ -160,9 +160,7 @@ namespace Charlotte
 				if (this.CondChangedCount == 1) // Do Refresh
 				{
 					GrphCond cond = null;
-					//string statusText = "";
-					string statusText = "(更新なし)";
-					//string statusText = this.Status.Text; // ng -- エラーメッセージが残る。
+					string statusText = this.Status.Text;
 					bool statusTextErrorFlag = false;
 
 					try
@@ -173,6 +171,8 @@ namespace Charlotte
 					{
 						statusText = ex.Message;
 						statusTextErrorFlag = true;
+
+						this.LastGrphCond = null;
 					}
 
 					if (cond != null && (this.LastGrphCond == null || this.LastGrphCond.IsSame(cond) == false)) // ? グラフ更新の必要あり
