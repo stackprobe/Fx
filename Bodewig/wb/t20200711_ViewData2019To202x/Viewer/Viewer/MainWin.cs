@@ -190,7 +190,7 @@ namespace Charlotte
 							((Ground.I.GrphData.GetPrice(Ground.I.GrphData.End).TTSec - Ground.I.GrphData.GetPrice(Ground.I.GrphData.Start).TTSec) / 86400.0).ToString("F3") +
 							" days), Step: " +
 							Ground.I.GrphData.Step +
-							" sec";
+							" mins";
 					}
 
 					if (this.Status.Text != statusText)
