@@ -11,6 +11,10 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 using Charlotte.Tools;
 using Charlotte.Chocomint.Dialogs;
+using Charlotte.TradingTimeChart;
+using Charlotte.MovingAverageChart;
+using Charlotte.Utils;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Charlotte
 {
@@ -61,6 +65,16 @@ namespace Charlotte
 			// noop
 		}
 
+		/// <summary>
+		/// 表示期間の終端の TTSec
+		/// </summary>
+		private long TTSecEnd;
+
+		/// <summary>
+		/// 表示期間のプロット間隔 TTSec
+		/// </summary>
+		private long TTSecStep;
+
 		private void MainWin_Shown(object sender, EventArgs e)
 		{
 			// -- 0001
@@ -69,7 +83,34 @@ namespace Charlotte
 			{
 				this.MainWin_Resize(null, null);
 
-				// TODO
+				{
+					string currPair = InputComboDlgTools.Show(
+						"通貨ペア選択",
+						"通貨ペアを選択して下さい。",
+						Consts.CurrPairs.Select(v => new InputComboDlgTools.Item<string>(v, v)),
+						false,
+						Consts.DefaultCurrPair
+						);
+
+					if (currPair == null)
+						throw new Exception("currPair == null");
+
+					ChartSrvc.I = new ChartSrvc(currPair);
+				}
+
+				ChartSrvc.I.Macs = new ChartSrvc.MacInfo[]
+				{
+					new ChartSrvc.MacInfo(60 * 24 * 5), // 5 days
+					new ChartSrvc.MacInfo(60 * 24 * 25), // 25 days
+				};
+
+				Consts.TTSEC_END_MIN = TTCommon.DateTimeToTTSec(20000101000000);
+				Consts.TTSEC_END_MAX = TTCommon.DateTimeToTTSec(DateTimeToSec.Now.GetDateTime());
+
+				this.TTSecEnd = Consts.TTSEC_END_MAX;
+				this.TTSecStep = Consts.TTSEC_STEP_MIN;
+
+				this.DrawCharts();
 			}
 			catch (Exception ex)
 			{
@@ -201,11 +242,60 @@ namespace Charlotte
 			});
 		}
 
+		private void 移動平均入力ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				try
+				{
+					string value = string.Join(":", ChartSrvc.I.Macs.Select(v => StringUtils.SecToUIString(v.Span * Consts.MA_STEP)).ToArray());
+
+					value = InputStringDlgTools.Show(
+						"移動平均入力",
+						"移動平均の時間(NNd,NNh,NNm,NN)を[:]区切りで入力して下さい。例 3d:12h:90m:6660",
+						false,
+						value
+						);
+
+					if (value == null)
+						return;
+
+					int[] secs = value.Split(':').Select(v => StringUtils.UIStringToSec(v)).ToArray();
+
+					if (Consts.MA_NUM_MAX < secs.Length)
+						throw new Exception("多いよ！");
+
+					foreach (int sec in secs)
+						if (sec % Consts.MA_STEP != 0 || sec < Consts.MA_SPAN_MIN * Consts.MA_STEP || Consts.MA_SPAN_MAX * Consts.MA_STEP < sec)
+							throw new Exception("不正なスパン：" + StringUtils.SecToUIString(sec));
+
+					ChartSrvc.I.Macs = secs.Select(sec => new ChartSrvc.MacInfo(sec / Consts.MA_STEP)).ToArray();
+				}
+				catch (Exception ex)
+				{
+					MessageDlgTools.Warning("移動平均入力_失敗", ex);
+				}
+			});
+		}
+
+		private void MaChart_Click(object sender, EventArgs e)
+		{
+			// noop
+		}
+
+		private void DmaChart_Click(object sender, EventArgs e)
+		{
+			// noop
+		}
+
 		private void 過去へToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			UIEvent_Go(() =>
 			{
-				// TODO
+				this.TTSecEnd -= (this.TTSecStep * Consts.PLOT_NUM) / 4;
+				this.TTSecEnd = Math.Max(this.TTSecEnd, Consts.TTSEC_END_MIN);
+
+				this.DrawCharts();
 			});
 		}
 
@@ -213,7 +303,10 @@ namespace Charlotte
 		{
 			UIEvent_Go(() =>
 			{
-				// TODO
+				this.TTSecEnd += (this.TTSecStep * Consts.PLOT_NUM) / 4;
+				this.TTSecEnd = Math.Min(this.TTSecEnd, Consts.TTSEC_END_MAX);
+
+				this.DrawCharts();
 			});
 		}
 
@@ -221,7 +314,11 @@ namespace Charlotte
 		{
 			UIEvent_Go(() =>
 			{
-				// TODO
+				this.TTSecStep *= 11;
+				this.TTSecStep /= 10;
+				this.TTSecStep = Math.Min(this.TTSecStep, Consts.TTSEC_STEP_MAX);
+
+				this.DrawCharts();
 			});
 		}
 
@@ -229,8 +326,168 @@ namespace Charlotte
 		{
 			UIEvent_Go(() =>
 			{
-				// TODO
+				this.TTSecStep *= 10;
+				this.TTSecStep /= 11;
+				this.TTSecStep = Math.Max(this.TTSecStep, Consts.TTSEC_STEP_MIN);
+
+				this.DrawCharts();
 			});
+		}
+
+		private void DrawCharts()
+		{
+			long ttSecStart = this.TTSecEnd - this.TTSecStep * (Consts.PLOT_NUM - 1);
+
+			this.MaChart.Series.Clear();
+			this.MaChart.Legends.Clear();
+			this.MaChart.ChartAreas.Clear();
+
+			double maYMin = double.MaxValue;
+			double maYMax = double.MinValue;
+
+			// Low
+			{
+				Series srs = new Series();
+				srs.ChartType = SeriesChartType.Line;
+				srs.Color = Color.LightGray;
+				srs.BorderWidth = 2;
+
+				for (int index = 0; index < Consts.PLOT_NUM; index++)
+				{
+					long ttSec = this.TTSecEnd - this.TTSecStep * index;
+					double y = ChartSrvc.I.Ttc.GetPrice(ttSec).Low;
+
+					maYMin = Math.Min(maYMin, y);
+					maYMax = Math.Max(maYMax, y);
+
+					srs.Points.AddXY(ttSec / 86400.0, y);
+				}
+				this.MaChart.Series.Add(srs);
+			}
+
+			// Hig
+			{
+				Series srs = new Series();
+				srs.ChartType = SeriesChartType.Line;
+				srs.Color = Color.LightGray;
+				srs.BorderWidth = 2;
+
+				for (int index = 0; index < Consts.PLOT_NUM; index++)
+				{
+					long ttSec = this.TTSecEnd - this.TTSecStep * index;
+					double y = ChartSrvc.I.Ttc.GetPrice(ttSec).Hig;
+
+					maYMin = Math.Min(maYMin, y);
+					maYMax = Math.Max(maYMax, y);
+
+					srs.Points.AddXY(ttSec / 86400.0, y);
+				}
+				this.MaChart.Series.Add(srs);
+			}
+
+			// Mid
+			{
+				Series srs = new Series();
+				srs.ChartType = SeriesChartType.Line;
+				srs.Color = Color.Green;
+
+				for (int index = 0; index < Consts.PLOT_NUM; index++)
+				{
+					long ttSec = this.TTSecEnd - this.TTSecStep * index;
+					double y = ChartSrvc.I.Ttc.GetPrice(ttSec).Mid;
+
+					maYMin = Math.Min(maYMin, y);
+					maYMax = Math.Max(maYMax, y);
+
+					srs.Points.AddXY(ttSec / 86400.0, y);
+				}
+				this.MaChart.Series.Add(srs);
+			}
+
+			for (int maIndex = 0; maIndex < ChartSrvc.I.Macs.Length; maIndex++)
+			{
+				ChartSrvc.MacInfo mac = ChartSrvc.I.Macs[maIndex];
+				Color maColor = Consts.MaColors[maIndex];
+
+				// ma
+				{
+					Series srs = new Series();
+					srs.ChartType = SeriesChartType.Line;
+					srs.Color = maColor;
+
+					for (int index = 0; index < Consts.PLOT_NUM; index++)
+					{
+						long ttSec = this.TTSecEnd - this.TTSecStep * index;
+						double y = mac.Mac.GetPrice(ttSec);
+
+						maYMin = Math.Min(maYMin, y);
+						maYMax = Math.Max(maYMax, y);
+
+						srs.Points.AddXY(ttSec / 86400.0, y);
+					}
+					this.MaChart.Series.Add(srs);
+				}
+			}
+
+			// ca
+			{
+				ChartArea ca = new ChartArea();
+
+				ca.AxisX.Minimum = ttSecStart / 86400.0;
+				ca.AxisX.Maximum = this.TTSecEnd / 86400.0;
+				ca.AxisX.Interval = 1.0;
+				ca.AxisY.Minimum = maYMin;
+				ca.AxisY.Maximum = maYMax;
+
+				this.MaChart.ChartAreas.Add(ca);
+			}
+
+			this.DmaChart.Series.Clear();
+			this.DmaChart.Legends.Clear();
+			this.DmaChart.ChartAreas.Clear();
+
+			double dmaYMin = double.MaxValue;
+			double dmaYMax = double.MinValue;
+
+			for (int maIndex = 0; maIndex < ChartSrvc.I.Macs.Length; maIndex++)
+			{
+				ChartSrvc.MacInfo mac = ChartSrvc.I.Macs[maIndex];
+				Color maColor = Consts.MaColors[maIndex];
+
+				// ma
+				{
+					Series srs = new Series();
+					srs.ChartType = SeriesChartType.Line;
+					srs.Color = maColor;
+
+					for (int index = 0; index < Consts.PLOT_NUM; index++)
+					{
+						long ttSec = this.TTSecEnd - this.TTSecStep * index;
+						double prY = ChartSrvc.I.Ttc.GetPrice(ttSec).Mid;
+						double maY = mac.Mac.GetPrice(ttSec);
+						double y = (prY - maY) / maY;
+
+						dmaYMin = Math.Min(dmaYMin, y);
+						dmaYMax = Math.Max(dmaYMax, y);
+
+						srs.Points.AddXY(ttSec / 86400.0, y);
+					}
+					this.DmaChart.Series.Add(srs);
+				}
+			}
+
+			// ca
+			{
+				ChartArea ca = new ChartArea();
+
+				ca.AxisX.Minimum = ttSecStart / 86400.0;
+				ca.AxisX.Maximum = this.TTSecEnd / 86400.0;
+				ca.AxisX.Interval = 1.0;
+				ca.AxisY.Minimum = dmaYMin;
+				ca.AxisY.Maximum = dmaYMax;
+
+				this.DmaChart.ChartAreas.Add(ca);
+			}
 		}
 	}
 }
