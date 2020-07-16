@@ -13,7 +13,8 @@ namespace Charlotte
 		/// </summary>
 		public static void FxCollect()
 		{
-			ProcessTools.runOnBatch("FxCollect.bat", @"C:\Dev\Fx\GaitameOnlineMonitor\Tools");
+			ProcessTools.runOnBatch("FxCollect.bat", @"C:\app\Fx");
+			//ProcessTools.runOnBatch("FxCollect.bat", @"C:\Dev\Fx\GaitameOnlineMonitor\Tools"); // del @ 2020.7.16
 		}
 
 		public static string DateTimeToString(long dateTime)
