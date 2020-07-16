@@ -435,9 +435,42 @@ namespace Charlotte
 
 				ca.AxisX.Minimum = ttSecStart / 86400.0;
 				ca.AxisX.Maximum = this.TTSecEnd / 86400.0;
-				ca.AxisX.Interval = 1.0;
 				ca.AxisY.Minimum = maYMin;
 				ca.AxisY.Maximum = maYMax;
+
+				{
+					double q = (ca.AxisX.Maximum - ca.AxisX.Minimum) / 6.0;
+
+					double x1 = ca.AxisX.Minimum;
+					double x2 = ca.AxisX.Minimum + q * 2.0;
+					double x3 = ca.AxisX.Minimum + q * 4.0;
+					double x4 = ca.AxisX.Maximum;
+
+					double xVal1 = ca.AxisX.Minimum + q * 1.0;
+					double xVal2 = ca.AxisX.Minimum + q * 3.0;
+					double xVal3 = ca.AxisX.Minimum + q * 5.0;
+
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+				}
+
+				{
+					double q = (ca.AxisY.Maximum - ca.AxisY.Minimum) / 6.0;
+
+					double y1 = ca.AxisY.Minimum;
+					double y2 = ca.AxisY.Minimum + q * 2.0;
+					double y3 = ca.AxisY.Minimum + q * 4.0;
+					double y4 = ca.AxisY.Maximum;
+
+					double yVal1 = ca.AxisY.Minimum + q * 1.0;
+					double yVal2 = ca.AxisY.Minimum + q * 3.0;
+					double yVal3 = ca.AxisY.Minimum + q * 5.0;
+
+					ca.AxisY.CustomLabels.Add(new CustomLabel(y1, y2, yVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisY.CustomLabels.Add(new CustomLabel(y2, y3, yVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisY.CustomLabels.Add(new CustomLabel(y3, y4, yVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+				}
 
 				this.MaChart.ChartAreas.Add(ca);
 			}
@@ -446,8 +479,36 @@ namespace Charlotte
 			this.DmaChart.Legends.Clear();
 			this.DmaChart.ChartAreas.Clear();
 
-			double dmaYMin = double.MaxValue;
-			double dmaYMax = double.MinValue;
+			double dmaYMin = Consts.DMA_LOW_03;
+			double dmaYMax = Consts.DMA_HIG_03;
+
+			{
+				Action<double, Color> drawHorizontallyLine = (y, color) =>
+				{
+					double x1 = ttSecStart / 86400.0;
+					double x2 = this.TTSecEnd / 86400.0;
+
+					Series srs = new Series();
+					srs.ChartType = SeriesChartType.Line;
+					srs.Color = color;
+					srs.BorderWidth = 3;
+
+					srs.Points.AddXY(x1, y);
+					srs.Points.AddXY(x2, y);
+
+					this.DmaChart.Series.Add(srs);
+				};
+
+				drawHorizontallyLine(Consts.DMA_HIG_03, Color.LightBlue);
+				drawHorizontallyLine(Consts.DMA_HIG_02, Color.LightBlue);
+				drawHorizontallyLine(Consts.DMA_HIG_01, Color.LightBlue);
+
+				drawHorizontallyLine(0.0, Color.LightGray);
+
+				drawHorizontallyLine(Consts.DMA_LOW_01, Color.LightPink);
+				drawHorizontallyLine(Consts.DMA_LOW_02, Color.LightPink);
+				drawHorizontallyLine(Consts.DMA_LOW_03, Color.LightPink);
+			}
 
 			for (int maIndex = 0; maIndex < ChartSrvc.I.Macs.Length; maIndex++)
 			{
@@ -482,12 +543,97 @@ namespace Charlotte
 
 				ca.AxisX.Minimum = ttSecStart / 86400.0;
 				ca.AxisX.Maximum = this.TTSecEnd / 86400.0;
-				ca.AxisX.Interval = 1.0;
 				ca.AxisY.Minimum = dmaYMin;
 				ca.AxisY.Maximum = dmaYMax;
 
+				{
+					double q = (ca.AxisX.Maximum - ca.AxisX.Minimum) / 6.0;
+
+					double x1 = ca.AxisX.Minimum;
+					double x2 = ca.AxisX.Minimum + q * 2.0;
+					double x3 = ca.AxisX.Minimum + q * 4.0;
+					double x4 = ca.AxisX.Maximum;
+
+					double xVal1 = ca.AxisX.Minimum + q * 1.0;
+					double xVal2 = ca.AxisX.Minimum + q * 3.0;
+					double xVal3 = ca.AxisX.Minimum + q * 5.0;
+
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+				}
+
+				{
+					double q = (ca.AxisY.Maximum - ca.AxisY.Minimum) / 6.0;
+
+					double y1 = ca.AxisY.Minimum;
+					double y2 = ca.AxisY.Minimum + q * 2.0;
+					double y3 = ca.AxisY.Minimum + q * 4.0;
+					double y4 = ca.AxisY.Maximum;
+
+					double yVal1 = ca.AxisY.Minimum + q * 1.0;
+					double yVal2 = ca.AxisY.Minimum + q * 3.0;
+					double yVal3 = ca.AxisY.Minimum + q * 5.0;
+
+					ca.AxisY.CustomLabels.Add(new CustomLabel(y1, y2, yVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisY.CustomLabels.Add(new CustomLabel(y2, y3, yVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisY.CustomLabels.Add(new CustomLabel(y3, y4, yVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+				}
+
 				this.DmaChart.ChartAreas.Add(ca);
 			}
+
+			{
+				string text =
+					 DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(ttSecStart)).ToString() +
+					 " ～ " +
+					 DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(this.TTSecEnd)).ToString() +
+					 ", Range: " +
+					 (this.TTSecEnd - ttSecStart) +
+					 " sec (" +
+					 ((this.TTSecEnd - ttSecStart) / 86400.0) +
+					 " days), Step: " +
+					 this.TTSecStep +
+					 " sec";
+
+				if (this.South.Text != text)
+					this.South.Text = text;
+			}
+		}
+
+		private void MaChart_MouseMove(object sender, MouseEventArgs e)
+		{
+			this.UIEvent_Go(() =>
+			{
+				this.ChartMoveMove(this.MaChart, e.X, e.Y);
+			});
+		}
+
+		private void DmaChart_MouseMove(object sender, MouseEventArgs e)
+		{
+			this.UIEvent_Go(() =>
+			{
+				this.ChartMoveMove(this.DmaChart, e.X, e.Y);
+			});
+		}
+
+		private void ChartMoveMove(Chart chart, int x, int y)
+		{
+			try
+			{
+				double aX = chart.ChartAreas[0].AxisX.PixelPositionToValue(x);
+				double aY = chart.ChartAreas[0].AxisY.PixelPositionToValue(y);
+
+				long ttSec = DoubleTools.ToLong(aX * 86400.0);
+				long dt = TTCommon.TTSecToDateTime(ttSec);
+
+				this.TTip.SetToolTip(
+					chart,
+					DateTimeUnit.FromDateTime(dt).ToString() + "\n" + aY.ToString("F9")
+					);
+			}
+			catch
+			{ }
 		}
 	}
 }

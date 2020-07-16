@@ -61,5 +61,13 @@ namespace Charlotte
 		};
 
 		public const int PLOT_NUM = 1000;
+
+		public const double DMA_HIG_03 = 0.007;
+		public const double DMA_HIG_02 = 0.005;
+		public const double DMA_HIG_01 = 0.003;
+
+		public const double DMA_LOW_01 = -0.003;
+		public const double DMA_LOW_02 = -0.005;
+		public const double DMA_LOW_03 = -0.007;
 	}
 }

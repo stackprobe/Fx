@@ -47,10 +47,11 @@
 			this.未来へToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.表示期間を拡大ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.表示期間を縮小ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.MaChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
-			this.DmaChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.optionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.移動平均入力ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.MaChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.DmaChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+			this.TTip = new System.Windows.Forms.ToolTip(this.components);
 			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MaChart)).BeginInit();
@@ -101,7 +102,7 @@
 			// 終了ToolStripMenuItem
 			// 
 			this.終了ToolStripMenuItem.Name = "終了ToolStripMenuItem";
-			this.終了ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.終了ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
 			this.終了ToolStripMenuItem.Text = "終了";
 			this.終了ToolStripMenuItem.Click += new System.EventHandler(this.終了ToolStripMenuItem_Click);
 			// 
@@ -148,6 +149,21 @@
 			this.表示期間を縮小ToolStripMenuItem.Text = "表示期間を縮小";
 			this.表示期間を縮小ToolStripMenuItem.Click += new System.EventHandler(this.表示期間を縮小ToolStripMenuItem_Click);
 			// 
+			// optionToolStripMenuItem
+			// 
+			this.optionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.移動平均入力ToolStripMenuItem});
+			this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
+			this.optionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+			this.optionToolStripMenuItem.Text = "Option";
+			// 
+			// 移動平均入力ToolStripMenuItem
+			// 
+			this.移動平均入力ToolStripMenuItem.Name = "移動平均入力ToolStripMenuItem";
+			this.移動平均入力ToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+			this.移動平均入力ToolStripMenuItem.Text = "移動平均入力";
+			this.移動平均入力ToolStripMenuItem.Click += new System.EventHandler(this.移動平均入力ToolStripMenuItem_Click);
+			// 
 			// MaChart
 			// 
 			chartArea1.Name = "ChartArea1";
@@ -164,6 +180,7 @@
 			this.MaChart.TabIndex = 2;
 			this.MaChart.Text = "MaChart";
 			this.MaChart.Click += new System.EventHandler(this.MaChart_Click);
+			this.MaChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MaChart_MouseMove);
 			// 
 			// DmaChart
 			// 
@@ -184,21 +201,13 @@
 			this.DmaChart.TabIndex = 3;
 			this.DmaChart.Text = "DmaChart";
 			this.DmaChart.Click += new System.EventHandler(this.DmaChart_Click);
+			this.DmaChart.MouseMove += new System.Windows.Forms.MouseEventHandler(this.DmaChart_MouseMove);
 			// 
-			// optionToolStripMenuItem
+			// TTip
 			// 
-			this.optionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.移動平均入力ToolStripMenuItem});
-			this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
-			this.optionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-			this.optionToolStripMenuItem.Text = "Option";
-			// 
-			// 移動平均入力ToolStripMenuItem
-			// 
-			this.移動平均入力ToolStripMenuItem.Name = "移動平均入力ToolStripMenuItem";
-			this.移動平均入力ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.移動平均入力ToolStripMenuItem.Text = "移動平均入力";
-			this.移動平均入力ToolStripMenuItem.Click += new System.EventHandler(this.移動平均入力ToolStripMenuItem_Click);
+			this.TTip.AutoPopDelay = 20000;
+			this.TTip.InitialDelay = 500;
+			this.TTip.ReshowDelay = 100;
 			// 
 			// MainWin
 			// 
@@ -250,6 +259,7 @@
 		private System.Windows.Forms.DataVisualization.Charting.Chart DmaChart;
 		private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 移動平均入力ToolStripMenuItem;
+		private System.Windows.Forms.ToolTip TTip;
 	}
 }
 
