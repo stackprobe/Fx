@@ -10,6 +10,7 @@ using System.Threading;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Charlotte.Tools;
+using Charlotte.Chocomint.Dialogs;
 
 namespace Charlotte
 {
@@ -35,9 +36,24 @@ namespace Charlotte
 
 		#endregion
 
+		private I2Size OrigSize;
+		private I4Rect OrigChartsRect;
+
 		public MainWin()
 		{
 			InitializeComponent();
+
+			this.MinimumSize = this.Size;
+
+			this.OrigSize = new I2Size(this.Width, this.Height);
+			this.OrigChartsRect = I4Rect.LTRB(
+				this.MaChart.Left,
+				this.MaChart.Top,
+				this.DmaChart.Right,
+				this.DmaChart.Bottom
+				);
+
+			this.South.Text = "";
 		}
 
 		private void MainWin_Load(object sender, EventArgs e)
@@ -48,6 +64,19 @@ namespace Charlotte
 		private void MainWin_Shown(object sender, EventArgs e)
 		{
 			// -- 0001
+
+			try
+			{
+				this.MainWin_Resize(null, null);
+
+				// TODO
+			}
+			catch (Exception ex)
+			{
+				MessageDlgTools.Error("Error @ Shown", ex);
+
+				Environment.Exit(1); // fatal
+			}
 
 			// ----
 
@@ -65,6 +94,8 @@ namespace Charlotte
 
 			// ----
 
+			// none
+
 			// -- 9999
 		}
 
@@ -76,11 +107,13 @@ namespace Charlotte
 				{
 					// -- 9000
 
+					// none
+
 					// ----
 				}
 				catch (Exception e)
 				{
-					MessageBox.Show("" + e, "Error @ CloseWindow()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageDlgTools.Error("Error @ CloseWindow()", e);
 				}
 				this.MTBusy.Enter();
 				this.Close();
@@ -106,21 +139,98 @@ namespace Charlotte
 					this.CloseWindow();
 					return;
 				}
-				if (this.MTCount == 150) // 15 sec
-				{
-					this.CloseWindow();
-					return;
-				}
 			}
 			catch (Exception ex)
 			{
-				ProcMain.WriteLog(ex);
+				MessageDlgTools.Error("Error @ Timer", ex);
 			}
 			finally
 			{
 				this.MTBusy.Leave();
 				this.MTCount++;
 			}
+		}
+
+		private void UIEvent_Go(Action routine)
+		{
+			using (this.MTBusy.Section())
+			{
+				try
+				{
+					routine();
+				}
+				catch (Exception e)
+				{
+					MessageDlgTools.Error("Error @ UIEvent_Go()", e);
+				}
+			}
+		}
+
+		private void MainWin_Resize(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				int diffX = this.Width - this.OrigSize.W;
+				int diffY = this.Height - this.OrigSize.H;
+
+				if (diffX < 0 || diffY < 0) // 最小化した場合
+					return;
+
+				int w = this.OrigChartsRect.W + diffX;
+				int h = this.OrigChartsRect.H + diffY;
+
+				int chartH = (h - 5) / 2;
+
+				this.MaChart.Left = this.OrigChartsRect.L;
+				this.MaChart.Top = this.OrigChartsRect.T;
+				this.MaChart.Width = w;
+				this.MaChart.Height = chartH;
+
+				this.DmaChart.Left = this.OrigChartsRect.L;
+				this.DmaChart.Top = this.OrigChartsRect.T + h - chartH;
+				this.DmaChart.Width = w;
+				this.DmaChart.Height = chartH;
+			});
+		}
+
+		private void 終了ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				this.CloseWindow();
+			});
+		}
+
+		private void 過去へToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				// TODO
+			});
+		}
+
+		private void 未来へToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				// TODO
+			});
+		}
+
+		private void 表示期間を拡大ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				// TODO
+			});
+		}
+
+		private void 表示期間を縮小ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			UIEvent_Go(() =>
+			{
+				// TODO
+			});
 		}
 	}
 }

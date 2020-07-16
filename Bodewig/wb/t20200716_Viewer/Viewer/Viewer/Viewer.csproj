@@ -42,8 +42,15 @@
     <Reference Include="Chocolate">
       <HintPath>C:\Dev\CSharp\Chocolate\Chocolate\bin\Release\Chocolate.dll</HintPath>
     </Reference>
+    <Reference Include="Chocomint">
+      <HintPath>..\..\..\..\..\..\CSharp\DLL\Chocomint\Chocomint\bin\Release\Chocomint.dll</HintPath>
+    </Reference>
+    <Reference Include="MovingAverageChart">
+      <HintPath>..\..\..\..\DLL\MovingAverageChart\MovingAverageChart\bin\Release\MovingAverageChart.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +59,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TradingTimeChart">
+      <HintPath>..\..\..\..\DLL\TradingTimeChart\TradingTimeChart\bin\Release\TradingTimeChart.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWin.cs">
