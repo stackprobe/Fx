@@ -7,6 +7,8 @@ namespace Charlotte.Utils
 {
 	public static class StringUtils
 	{
+		// ---- Sec <--> UIString
+
 		public static string SecToUIString(int sec)
 		{
 			if (86400 <= sec && sec % 86400 == 0)
@@ -33,6 +35,23 @@ namespace Charlotte.Utils
 				return int.Parse(str.Substring(0, str.Length - 1)) * 60;
 
 			return int.Parse(str);
+		}
+
+		// ----
+
+		public static string SecSpanToUIString(long secSpan)
+		{
+			long t = secSpan;
+
+			int s = (int)(t % 60);
+			t /= 60;
+			int m = (int)(t % 60);
+			t /= 60;
+			int h = (int)(t % 60);
+			t /= 24;
+			int d = (int)t;
+
+			return string.Format("{0}d {1:D2}:{2:D2}:{3:D2}", d, h, m, s);
 		}
 	}
 }

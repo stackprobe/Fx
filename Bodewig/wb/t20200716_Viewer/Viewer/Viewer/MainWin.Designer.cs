@@ -76,8 +76,10 @@
 			// South
 			// 
 			this.South.Name = "South";
-			this.South.Size = new System.Drawing.Size(38, 17);
+			this.South.Size = new System.Drawing.Size(738, 17);
+			this.South.Spring = true;
 			this.South.Text = "South";
+			this.South.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// menuStrip1
 			// 

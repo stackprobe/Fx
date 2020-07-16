@@ -46,9 +46,10 @@ namespace Charlotte
 		public const long TTSEC_STEP_MIN = 60; // 1 mins
 		public const long TTSEC_STEP_MAX = 86400; // 1 days
 
-		public const int MA_SPAN_MIN = 60; // 1 hours
-		public const int MA_SPAN_MAX = 60 * 24 * 100; // 100 days
-		public const int MA_STEP = 60; // 1 mins
+		public const int MA_SEC_SPAN_MIN = 3600; // 1 hours
+		public const int MA_SEC_SPAN_MAX = 86400 * 100; // 100 days
+		public const int MA_STEP_MIN = 60; // 1 mins
+		public const int MA_STEP_MAX = 86400; // 1 days
 		public const int MA_NUM_MAX = 5;
 
 		public static Color[] MaColors = new Color[]

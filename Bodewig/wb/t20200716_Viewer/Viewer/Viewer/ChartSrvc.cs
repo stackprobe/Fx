@@ -13,15 +13,32 @@ namespace Charlotte
 		public class MacInfo
 		{
 			public MAChart Mac;
-			public int Span;
+			public int SecSpan;
+			public int Step;
 
-			public MacInfo(int span)
+			public MacInfo(int secSpan, int step)
 			{
-				if (span < Consts.MA_SPAN_MIN || Consts.MA_SPAN_MAX < span)
-					throw new ArgumentException("Bad span: " + span);
+				if (secSpan < Consts.MA_SEC_SPAN_MIN || Consts.MA_SEC_SPAN_MAX < secSpan)
+					throw new ArgumentException("Bad secSpan: " + secSpan);
 
-				this.Mac = new MAChart(ttSec => ChartSrvc.I.Ttc.GetPrice(ttSec).Mid, span, Consts.MA_STEP);
-				this.Span = span;
+				if (step < Consts.MA_STEP_MIN || Consts.MA_STEP_MAX < step)
+					throw new ArgumentException("Bad step: " + step);
+
+				if (secSpan % step != 0)
+					throw new ArgumentException("Bad secSpan, step: " + secSpan + ", " + step);
+
+				this.Mac = new MAChart(ttSec => ChartSrvc.I.Ttc.GetPrice(ttSec).Mid, secSpan / step, step);
+				this.SecSpan = secSpan;
+				this.Step = step;
+			}
+
+			public static MacInfo Safe(int secSpan, int step)
+			{
+				secSpan /= step;
+				secSpan = Math.Max(secSpan, 1);
+				secSpan *= step;
+
+				return new MacInfo(secSpan, step);
 			}
 		}
 

@@ -75,6 +75,11 @@ namespace Charlotte
 		/// </summary>
 		private long TTSecStep;
 
+		/// <summary>
+		/// 移動平均のプロット間隔 TTSec
+		/// </summary>
+		private int MaStep;
+
 		private void MainWin_Shown(object sender, EventArgs e)
 		{
 			// -- 0001
@@ -98,17 +103,34 @@ namespace Charlotte
 					ChartSrvc.I = new ChartSrvc(currPair);
 				}
 
-				ChartSrvc.I.Macs = new ChartSrvc.MacInfo[]
-				{
-					new ChartSrvc.MacInfo(60 * 24 * 5), // 5 days
-					new ChartSrvc.MacInfo(60 * 24 * 25), // 25 days
-				};
-
 				Consts.TTSEC_END_MIN = TTCommon.DateTimeToTTSec(20000101000000);
 				Consts.TTSEC_END_MAX = TTCommon.DateTimeToTTSec(DateTimeToSec.Now.GetDateTime());
 
 				this.TTSecEnd = Consts.TTSEC_END_MAX;
 				this.TTSecStep = Consts.TTSEC_STEP_MIN;
+
+				{
+					int maStep = InputStringDlgTools.Int(
+						"移動平均プロット間隔入力",
+						"移動平均のプロット間隔を秒単位で入力して下さい。",
+						false,
+						60,
+						Consts.MA_STEP_MIN,
+						Consts.MA_STEP_MAX,
+						-1
+						);
+
+					if (maStep == -1)
+						throw new Exception("maStep == -1");
+
+					this.MaStep = maStep;
+				}
+
+				ChartSrvc.I.Macs = new ChartSrvc.MacInfo[]
+				{
+					ChartSrvc.MacInfo.Safe(86400 * 5, this.MaStep), // 5 days
+					ChartSrvc.MacInfo.Safe(86400 * 25, this.MaStep), // 25 days
+				};
 
 				this.DrawCharts();
 			}
@@ -248,7 +270,7 @@ namespace Charlotte
 			{
 				try
 				{
-					string value = string.Join(":", ChartSrvc.I.Macs.Select(v => StringUtils.SecToUIString(v.Span * Consts.MA_STEP)).ToArray());
+					string value = string.Join(":", ChartSrvc.I.Macs.Select(v => StringUtils.SecToUIString(v.SecSpan)).ToArray());
 
 					value = InputStringDlgTools.Show(
 						"移動平均入力",
@@ -266,10 +288,10 @@ namespace Charlotte
 						throw new Exception("多いよ！");
 
 					foreach (int sec in secs)
-						if (sec % Consts.MA_STEP != 0 || sec < Consts.MA_SPAN_MIN * Consts.MA_STEP || Consts.MA_SPAN_MAX * Consts.MA_STEP < sec)
+						if (sec % this.MaStep != 0 || sec < Consts.MA_SEC_SPAN_MIN || Consts.MA_SEC_SPAN_MAX < sec)
 							throw new Exception("不正なスパン：" + StringUtils.SecToUIString(sec));
 
-					ChartSrvc.I.Macs = secs.Select(sec => new ChartSrvc.MacInfo(sec / Consts.MA_STEP)).ToArray();
+					ChartSrvc.I.Macs = secs.Select(sec => new ChartSrvc.MacInfo(sec, this.MaStep)).ToArray();
 				}
 				catch (Exception ex)
 				{
@@ -450,9 +472,21 @@ namespace Charlotte
 					double xVal2 = ca.AxisX.Minimum + q * 3.0;
 					double xVal3 = ca.AxisX.Minimum + q * 5.0;
 
-					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					//ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					//ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					//ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+
+					long xSec1 = DoubleTools.ToLong(xVal1 * 86400.0);
+					long xSec2 = DoubleTools.ToLong(xVal2 * 86400.0);
+					long xSec3 = DoubleTools.ToLong(xVal3 * 86400.0);
+
+					string xL1 = StringUtils.SecSpanToUIString(0);
+					string xL2 = StringUtils.SecSpanToUIString(xSec2 - xSec1);
+					string xL3 = StringUtils.SecSpanToUIString(xSec3 - xSec1);
+
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xL1, 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xL2, 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xL3, 0, LabelMarkStyle.None, GridTickTypes.All));
 				}
 
 				{
@@ -483,7 +517,7 @@ namespace Charlotte
 			double dmaYMax = Consts.DMA_HIG_03;
 
 			{
-				Action<double, Color> drawHorizontallyLine = (y, color) =>
+				Action<double, int, Color> drawHorizontallyLine = (y, width, color) =>
 				{
 					double x1 = ttSecStart / 86400.0;
 					double x2 = this.TTSecEnd / 86400.0;
@@ -491,7 +525,7 @@ namespace Charlotte
 					Series srs = new Series();
 					srs.ChartType = SeriesChartType.Line;
 					srs.Color = color;
-					srs.BorderWidth = 3;
+					srs.BorderWidth = width;
 
 					srs.Points.AddXY(x1, y);
 					srs.Points.AddXY(x2, y);
@@ -499,15 +533,15 @@ namespace Charlotte
 					this.DmaChart.Series.Add(srs);
 				};
 
-				drawHorizontallyLine(Consts.DMA_HIG_03, Color.LightBlue);
-				drawHorizontallyLine(Consts.DMA_HIG_02, Color.LightBlue);
-				drawHorizontallyLine(Consts.DMA_HIG_01, Color.LightBlue);
+				drawHorizontallyLine(Consts.DMA_HIG_03, 7, Color.LightBlue);
+				drawHorizontallyLine(Consts.DMA_HIG_02, 5, Color.LightBlue);
+				drawHorizontallyLine(Consts.DMA_HIG_01, 3, Color.LightBlue);
 
-				drawHorizontallyLine(0.0, Color.LightGray);
+				drawHorizontallyLine(0.0, 3, Color.LightGray);
 
-				drawHorizontallyLine(Consts.DMA_LOW_01, Color.LightPink);
-				drawHorizontallyLine(Consts.DMA_LOW_02, Color.LightPink);
-				drawHorizontallyLine(Consts.DMA_LOW_03, Color.LightPink);
+				drawHorizontallyLine(Consts.DMA_LOW_01, 3, Color.LightPink);
+				drawHorizontallyLine(Consts.DMA_LOW_02, 5, Color.LightPink);
+				drawHorizontallyLine(Consts.DMA_LOW_03, 7, Color.LightPink);
 			}
 
 			for (int maIndex = 0; maIndex < ChartSrvc.I.Macs.Length; maIndex++)
@@ -558,9 +592,17 @@ namespace Charlotte
 					double xVal2 = ca.AxisX.Minimum + q * 3.0;
 					double xVal3 = ca.AxisX.Minimum + q * 5.0;
 
-					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					//ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					//ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					//ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+
+					string xL1 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal1 * 86400.0))).ToString();
+					string xL2 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal2 * 86400.0))).ToString();
+					string xL3 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal3 * 86400.0))).ToString();
+
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xL1, 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xL2, 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xL3, 0, LabelMarkStyle.None, GridTickTypes.All));
 				}
 
 				{
@@ -594,6 +636,10 @@ namespace Charlotte
 					 ((this.TTSecEnd - ttSecStart) / 86400.0) +
 					 " days), Step: " +
 					 this.TTSecStep +
+					 " sec, MA: { " +
+					 string.Join(", ", ChartSrvc.I.Macs.Select(v => v.SecSpan + "s_" + (v.SecSpan / 86400.0).ToString("F3") + "d")) +
+					 " } MA_Step: " +
+					 this.MaStep +
 					 " sec";
 
 				if (this.South.Text != text)
