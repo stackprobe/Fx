@@ -47,11 +47,11 @@ namespace Charlotte.Utils
 			t /= 60;
 			int m = (int)(t % 60);
 			t /= 60;
-			int h = (int)(t % 60);
+			int h = (int)(t % 24);
 			t /= 24;
 			int d = (int)t;
 
-			return string.Format("{0}d {1:D2}:{2:D2}:{3:D2}", d, h, m, s);
+			return string.Format("{0}d {1:D2}:{2:D2}:{3:D2} ({4:F3}h)", d, h, m, s, secSpan / 3600.0);
 		}
 	}
 }

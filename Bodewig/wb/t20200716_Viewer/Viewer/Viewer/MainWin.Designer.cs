@@ -52,6 +52,11 @@
 			this.MaChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.DmaChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
 			this.TTip = new System.Windows.Forms.ToolTip(this.components);
+			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+			this.少し過去へToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.少し未来へToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.表示期間を少し拡大ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.表示期間を少し縮小ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.MaChart)).BeginInit();
@@ -76,7 +81,7 @@
 			// South
 			// 
 			this.South.Name = "South";
-			this.South.Size = new System.Drawing.Size(738, 17);
+			this.South.Size = new System.Drawing.Size(769, 17);
 			this.South.Spring = true;
 			this.South.Text = "South";
 			this.South.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -114,7 +119,12 @@
             this.過去へToolStripMenuItem,
             this.未来へToolStripMenuItem,
             this.表示期間を拡大ToolStripMenuItem,
-            this.表示期間を縮小ToolStripMenuItem});
+            this.表示期間を縮小ToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.少し過去へToolStripMenuItem,
+            this.少し未来へToolStripMenuItem,
+            this.表示期間を少し拡大ToolStripMenuItem,
+            this.表示期間を少し縮小ToolStripMenuItem});
 			this.commandToolStripMenuItem.Name = "commandToolStripMenuItem";
 			this.commandToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
 			this.commandToolStripMenuItem.Text = "Command";
@@ -123,7 +133,7 @@
 			// 
 			this.過去へToolStripMenuItem.Name = "過去へToolStripMenuItem";
 			this.過去へToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Left)));
-			this.過去へToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+			this.過去へToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
 			this.過去へToolStripMenuItem.Text = "過去へ";
 			this.過去へToolStripMenuItem.Click += new System.EventHandler(this.過去へToolStripMenuItem_Click);
 			// 
@@ -131,7 +141,7 @@
 			// 
 			this.未来へToolStripMenuItem.Name = "未来へToolStripMenuItem";
 			this.未来へToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Right)));
-			this.未来へToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+			this.未来へToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
 			this.未来へToolStripMenuItem.Text = "未来へ";
 			this.未来へToolStripMenuItem.Click += new System.EventHandler(this.未来へToolStripMenuItem_Click);
 			// 
@@ -139,7 +149,7 @@
 			// 
 			this.表示期間を拡大ToolStripMenuItem.Name = "表示期間を拡大ToolStripMenuItem";
 			this.表示期間を拡大ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Up)));
-			this.表示期間を拡大ToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+			this.表示期間を拡大ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
 			this.表示期間を拡大ToolStripMenuItem.Text = "表示期間を拡大";
 			this.表示期間を拡大ToolStripMenuItem.Click += new System.EventHandler(this.表示期間を拡大ToolStripMenuItem_Click);
 			// 
@@ -147,7 +157,7 @@
 			// 
 			this.表示期間を縮小ToolStripMenuItem.Name = "表示期間を縮小ToolStripMenuItem";
 			this.表示期間を縮小ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Down)));
-			this.表示期間を縮小ToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+			this.表示期間を縮小ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
 			this.表示期間を縮小ToolStripMenuItem.Text = "表示期間を縮小";
 			this.表示期間を縮小ToolStripMenuItem.Click += new System.EventHandler(this.表示期間を縮小ToolStripMenuItem_Click);
 			// 
@@ -211,6 +221,47 @@
 			this.TTip.InitialDelay = 500;
 			this.TTip.ReshowDelay = 100;
 			// 
+			// toolStripMenuItem1
+			// 
+			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(265, 6);
+			// 
+			// 少し過去へToolStripMenuItem
+			// 
+			this.少し過去へToolStripMenuItem.Name = "少し過去へToolStripMenuItem";
+			this.少し過去へToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Left)));
+			this.少し過去へToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.少し過去へToolStripMenuItem.Text = "少し過去へ";
+			this.少し過去へToolStripMenuItem.Click += new System.EventHandler(this.少し過去へToolStripMenuItem_Click);
+			// 
+			// 少し未来へToolStripMenuItem
+			// 
+			this.少し未来へToolStripMenuItem.Name = "少し未来へToolStripMenuItem";
+			this.少し未来へToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Right)));
+			this.少し未来へToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.少し未来へToolStripMenuItem.Text = "少し未来へ";
+			this.少し未来へToolStripMenuItem.Click += new System.EventHandler(this.少し未来へToolStripMenuItem_Click);
+			// 
+			// 表示期間を少し拡大ToolStripMenuItem
+			// 
+			this.表示期間を少し拡大ToolStripMenuItem.Name = "表示期間を少し拡大ToolStripMenuItem";
+			this.表示期間を少し拡大ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Up)));
+			this.表示期間を少し拡大ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.表示期間を少し拡大ToolStripMenuItem.Text = "表示期間を少し拡大";
+			this.表示期間を少し拡大ToolStripMenuItem.Click += new System.EventHandler(this.表示期間を少し拡大ToolStripMenuItem_Click);
+			// 
+			// 表示期間を少し縮小ToolStripMenuItem
+			// 
+			this.表示期間を少し縮小ToolStripMenuItem.Name = "表示期間を少し縮小ToolStripMenuItem";
+			this.表示期間を少し縮小ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Down)));
+			this.表示期間を少し縮小ToolStripMenuItem.Size = new System.Drawing.Size(268, 22);
+			this.表示期間を少し縮小ToolStripMenuItem.Text = "表示期間を少し縮小";
+			this.表示期間を少し縮小ToolStripMenuItem.Click += new System.EventHandler(this.表示期間を少し縮小ToolStripMenuItem_Click);
+			// 
 			// MainWin
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -262,6 +313,11 @@
 		private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 移動平均入力ToolStripMenuItem;
 		private System.Windows.Forms.ToolTip TTip;
+		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+		private System.Windows.Forms.ToolStripMenuItem 少し過去へToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 少し未来へToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 表示期間を少し拡大ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 表示期間を少し縮小ToolStripMenuItem;
 	}
 }
 

@@ -133,6 +133,8 @@ namespace Charlotte
 				};
 
 				this.DrawCharts();
+
+				this.移動平均入力ToolStripMenuItem_Click(null, null); // zantei
 			}
 			catch (Exception ex)
 			{
@@ -231,7 +233,7 @@ namespace Charlotte
 
 		private void MainWin_Resize(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				int diffX = this.Width - this.OrigSize.W;
 				int diffY = this.Height - this.OrigSize.H;
@@ -258,7 +260,7 @@ namespace Charlotte
 
 		private void 終了ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				this.CloseWindow();
 			});
@@ -266,7 +268,7 @@ namespace Charlotte
 
 		private void 移動平均入力ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				try
 				{
@@ -297,6 +299,8 @@ namespace Charlotte
 				{
 					MessageDlgTools.Warning("移動平均入力_失敗", ex);
 				}
+
+				this.DrawCharts();
 			});
 		}
 
@@ -312,7 +316,7 @@ namespace Charlotte
 
 		private void 過去へToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				this.TTSecEnd -= (this.TTSecStep * Consts.PLOT_NUM) / 4;
 				this.TTSecEnd = Math.Max(this.TTSecEnd, Consts.TTSEC_END_MIN);
@@ -323,7 +327,7 @@ namespace Charlotte
 
 		private void 未来へToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				this.TTSecEnd += (this.TTSecStep * Consts.PLOT_NUM) / 4;
 				this.TTSecEnd = Math.Min(this.TTSecEnd, Consts.TTSEC_END_MAX);
@@ -334,7 +338,7 @@ namespace Charlotte
 
 		private void 表示期間を拡大ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				this.TTSecStep *= 11;
 				this.TTSecStep /= 10;
@@ -346,7 +350,7 @@ namespace Charlotte
 
 		private void 表示期間を縮小ToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			UIEvent_Go(() =>
+			this.UIEvent_Go(() =>
 			{
 				this.TTSecStep *= 10;
 				this.TTSecStep /= 11;
@@ -354,6 +358,100 @@ namespace Charlotte
 
 				this.DrawCharts();
 			});
+		}
+
+		private void 少し過去へToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			this.UIEvent_Go(() =>
+			{
+				long step = this.GetChartSlideStepShort();
+
+				this.TTSecEnd /= step;
+				this.TTSecEnd--;
+				this.TTSecEnd *= step;
+
+				this.TTSecEnd = Math.Max(this.TTSecEnd, Consts.TTSEC_END_MIN);
+
+				this.DrawCharts();
+			});
+		}
+
+		private void 少し未来へToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			this.UIEvent_Go(() =>
+			{
+				long step = this.GetChartSlideStepShort();
+
+				this.TTSecEnd /= step;
+				this.TTSecEnd++;
+				this.TTSecEnd *= step;
+
+				this.TTSecEnd = Math.Min(this.TTSecEnd, Consts.TTSEC_END_MAX);
+
+				this.DrawCharts();
+			});
+		}
+
+		private long GetChartSlideStepShort()
+		{
+			long ttSecRange = this.TTSecStep * Consts.PLOT_NUM;
+
+			if (ttSecRange < 86400)
+				return 600;
+
+			if (ttSecRange < 86400 * 6)
+				return 3600;
+
+			if (ttSecRange < 86400 * 36)
+				return 3600 * 6;
+
+			if (ttSecRange < 86400 * 144)
+				return 86400;
+
+			return 86400 * 2;
+		}
+
+		private void 表示期間を少し拡大ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			this.UIEvent_Go(() =>
+			{
+				long step = this.GetChartStepChangeStepShort();
+
+				this.TTSecStep /= step;
+				this.TTSecStep++;
+				this.TTSecStep *= step;
+
+				this.TTSecStep = Math.Min(this.TTSecStep, Consts.TTSEC_STEP_MAX);
+
+				this.DrawCharts();
+			});
+		}
+
+		private void 表示期間を少し縮小ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			this.UIEvent_Go(() =>
+			{
+				long step = this.GetChartStepChangeStepShort();
+
+				this.TTSecStep /= step;
+				this.TTSecStep--;
+				this.TTSecStep *= step;
+
+				this.TTSecStep = Math.Max(this.TTSecStep, Consts.TTSEC_STEP_MIN);
+
+				this.DrawCharts();
+			});
+		}
+
+		private long GetChartStepChangeStepShort()
+		{
+			if (this.TTSecStep < 360)
+				return 1;
+
+			if (this.TTSecStep < 3600)
+				return 10;
+
+			return 60;
 		}
 
 		private void DrawCharts()
@@ -472,10 +570,8 @@ namespace Charlotte
 					double xVal2 = ca.AxisX.Minimum + q * 3.0;
 					double xVal3 = ca.AxisX.Minimum + q * 5.0;
 
-					//ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					//ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					//ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-
+#if true
+#if true
 					long xSec1 = DoubleTools.ToLong(xVal1 * 86400.0);
 					long xSec2 = DoubleTools.ToLong(xVal2 * 86400.0);
 					long xSec3 = DoubleTools.ToLong(xVal3 * 86400.0);
@@ -483,10 +579,20 @@ namespace Charlotte
 					string xL1 = StringUtils.SecSpanToUIString(0);
 					string xL2 = StringUtils.SecSpanToUIString(xSec2 - xSec1);
 					string xL3 = StringUtils.SecSpanToUIString(xSec3 - xSec1);
+#else // old
+					string xL1 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal1 * 86400.0))).ToString();
+					string xL2 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal2 * 86400.0))).ToString();
+					string xL3 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal3 * 86400.0))).ToString();
+#endif
 
 					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xL1, 0, LabelMarkStyle.None, GridTickTypes.All));
 					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xL2, 0, LabelMarkStyle.None, GridTickTypes.All));
 					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xL3, 0, LabelMarkStyle.None, GridTickTypes.All));
+#else // old
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+#endif
 				}
 
 				{
@@ -592,10 +698,7 @@ namespace Charlotte
 					double xVal2 = ca.AxisX.Minimum + q * 3.0;
 					double xVal3 = ca.AxisX.Minimum + q * 5.0;
 
-					//ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					//ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-					//ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
-
+#if true
 					string xL1 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal1 * 86400.0))).ToString();
 					string xL2 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal2 * 86400.0))).ToString();
 					string xL3 = DateTimeUnit.FromDateTime(TTCommon.TTSecToDateTime(DoubleTools.ToLong(xVal3 * 86400.0))).ToString();
@@ -603,6 +706,11 @@ namespace Charlotte
 					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xL1, 0, LabelMarkStyle.None, GridTickTypes.All));
 					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xL2, 0, LabelMarkStyle.None, GridTickTypes.All));
 					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xL3, 0, LabelMarkStyle.None, GridTickTypes.All));
+#else // old
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x1, x2, xVal1.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x2, x3, xVal2.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+					ca.AxisX.CustomLabels.Add(new CustomLabel(x3, x4, xVal3.ToString("F3"), 0, LabelMarkStyle.None, GridTickTypes.All));
+#endif
 				}
 
 				{
