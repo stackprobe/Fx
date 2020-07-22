@@ -196,14 +196,18 @@ namespace Charlotte
 			this.MTBusy.Enter();
 			try
 			{
-				// -- 3001
-
 				if (this.XPressed)
 				{
 					this.XPressed = false;
 					this.CloseWindow();
 					return;
 				}
+
+				// -- 3001
+
+				// none
+
+				// ----
 			}
 			catch (Exception ex)
 			{
