@@ -43,7 +43,7 @@ namespace Charlotte.Tools
 					_buff.Append("{");
 					_buff.Append(_newLine);
 
-					foreach (string key in om.getKeys()) // HACK keyOrder
+					foreach (string key in om.getKeys()) // HACK: keyOrder
 					{
 						object value = om[key];
 
