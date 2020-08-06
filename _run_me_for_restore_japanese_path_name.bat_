@@ -1,5 +1,5 @@
-REN GOMChart\GOMChart\[Japanese-path-name]_0001.resx Win単純移動平均.resx
-REN GOMChart\GOMChart\[Japanese-path-name]_0002.cs Win単純移動平均.Designer.cs
-REN GOMChart\GOMChart\[Japanese-path-name]_0001.cs Win単純移動平均.cs
-REN GOMChart\[Japanese-path-name]_0001.txt _単純移動平均.txt
-REN [Japanese-path-name]_0001 "#### Bodewig に wb 有り"
+REN GOMChart\GOMChart\[Includes-Non-ASCII-characters]_0001.resx Win単純移動平均.resx
+REN GOMChart\GOMChart\[Includes-Non-ASCII-characters]_0002.cs Win単純移動平均.Designer.cs
+REN GOMChart\GOMChart\[Includes-Non-ASCII-characters]_0001.cs Win単純移動平均.cs
+REN GOMChart\[Includes-Non-ASCII-characters]_0001.txt _単純移動平均.txt
+REN [Includes-Non-ASCII-characters]_0001 "#### Bodewig に wb 有り"
